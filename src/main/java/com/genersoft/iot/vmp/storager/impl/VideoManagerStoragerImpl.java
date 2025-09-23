@@ -200,6 +200,9 @@ public class VideoManagerStoragerImpl implements IVideoManagerStorager {
 	@Override
 	public synchronized boolean outline(String deviceId) {
 		Device device = deviceMapper.getDeviceByDeviceId(deviceId);
+		if(device == null){
+			return true;
+		}
 		device.setOnline(0);
 		System.out.println("更新设备离线");
 		return deviceMapper.update(device) > 0;

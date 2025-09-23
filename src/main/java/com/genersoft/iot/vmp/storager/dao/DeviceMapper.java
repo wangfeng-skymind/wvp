@@ -25,6 +25,7 @@ public interface DeviceMapper {
                 "transport," +
                 "streamMode," +
                 "ip," +
+                "local_ip," +
                 "port," +
                 "hostAddress," +
                 "online" +
@@ -37,6 +38,7 @@ public interface DeviceMapper {
                 "#{transport}," +
                 "#{streamMode}," +
                 "#{ip}," +
+                "#{local_ip}," +
                 "#{port}," +
                 "#{hostAddress}," +
                 "#{online}" +
@@ -54,7 +56,7 @@ public interface DeviceMapper {
                 "<if test=\"streamMode != null\">, streamMode='${streamMode}'</if>" +
                 "<if test=\"ip != null\">, ip='${ip}'</if>" +
                 "<if test=\"port != null\">, port=${port}</if>" +
-                "<if test=\"local_ip != null\">, local_ip=${local_ip}</if>" +
+                "<if test=\"local_ip != null\">, local_ip='${local_ip}'</if>" +
                 "<if test=\"hostAddress != null\">, hostAddress='${hostAddress}'</if>" +
                 "<if test=\"online != null\">, online=${online}</if>" +
                 "WHERE deviceId='${deviceId}'"+

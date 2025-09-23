@@ -612,6 +612,8 @@ public class MessageRequestProcessor extends SIPRequestAbstractProcessor {
 		try {
 			Element rootElement = getRootElement(evt);
 			String deviceId = XmlUtil.getText(rootElement, "DeviceID");
+			logger.info("接收到KeepAlive消息=设备id===" + deviceId);
+
 			// 检查设备是否存在， 不存在则不回复
 			if (storager.exists(deviceId)) {
 				// 回复200 OK
@@ -619,7 +621,10 @@ public class MessageRequestProcessor extends SIPRequestAbstractProcessor {
 				if (offLineDetector.isOnline(deviceId)) {
 					publisher.onlineEventPublish(deviceId, VideoManagerConstants.EVENT_ONLINE_KEEPLIVE);
 				} else {
+					publisher.outlineEventPublish(deviceId, VideoManagerConstants.EVENT_OUTLINE_UNREGISTER);
 				}
+			} else {
+				publisher.outlineEventPublish(deviceId, VideoManagerConstants.EVENT_OUTLINE_UNREGISTER);
 			}
 		} catch (ParseException | SipException | InvalidArgumentException | DocumentException e) {
 			e.printStackTrace();
