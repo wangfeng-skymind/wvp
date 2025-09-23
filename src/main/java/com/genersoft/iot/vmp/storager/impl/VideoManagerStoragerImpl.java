@@ -145,6 +145,7 @@ public class VideoManagerStoragerImpl implements IVideoManagerStorager {
 	public PageInfo<Device> queryVideoDeviceList(int page, int count) {
 		PageHelper.startPage(page, count);
 		List<Device> all = deviceMapper.getDevices();
+		System.out.println(page + ">>>>"+count+">>>设备数量===" + all != null ? all.size() : 0);
 		return new PageInfo<>(all);
 	}
 

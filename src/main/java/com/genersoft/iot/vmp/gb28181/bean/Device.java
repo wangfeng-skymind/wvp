@@ -41,7 +41,10 @@ public class Device {
 	 * TCP-PASSIVE：tcp被动模式
 	 */
 	private String streamMode;
-
+	/**
+	 * wan地址_ip
+	 */
+	private String  local_ip;
 	/**
 	 * wan地址_ip
 	 */
@@ -72,6 +75,14 @@ public class Device {
 	 * 通道个数
 	 */
 	private int channelCount;
+
+	public String getLocal_ip() {
+		return local_ip;
+	}
+
+	public void setLocal_ip(String local_ip) {
+		this.local_ip = local_ip;
+	}
 
 	public String getDeviceId() {
 		return deviceId;

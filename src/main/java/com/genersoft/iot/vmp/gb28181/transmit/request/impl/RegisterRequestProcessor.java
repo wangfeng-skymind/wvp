@@ -8,6 +8,7 @@ import java.util.Locale;
 import javax.sip.InvalidArgumentException;
 import javax.sip.RequestEvent;
 import javax.sip.SipException;
+import javax.sip.address.SipURI;
 import javax.sip.header.AuthorizationHeader;
 import javax.sip.header.ContactHeader;
 import javax.sip.header.ExpiresHeader;
@@ -18,6 +19,7 @@ import javax.sip.message.Response;
 
 import com.genersoft.iot.vmp.gb28181.bean.WvpSipDate;
 import gov.nist.javax.sip.header.SIPDateHeader;
+import gov.nist.javax.sip.message.SIPMessage;
 import gov.nist.javax.sip.message.SIPRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,12 +64,27 @@ public class RegisterRequestProcessor extends SIPRequestAbstractProcessor {
 		try {
 			logger.info("===收到注册请求，开始处理");
 			Request request = evt.getRequest();
+			Request clonedRequest = (Request) request.clone();
+
 			// 获取来源地址（IP+Port）
-			String remoteIp = ((SIPRequest) request).getRemoteAddress().getHostAddress();
-			int remotePort = ((SIPRequest) request).getRemotePort();
-
-			logger.info("===注册请求来源地址: {}:{}", remoteIp, remotePort);
-
+			String remoteIp = ((SIPRequest) clonedRequest).getRemoteAddress().getHostAddress();
+			int remotePort = ((SIPRequest) clonedRequest).getRemotePort();
+			ExpiresHeader expires = clonedRequest.getExpires();
+			logger.info("===注册请求来源设备公网IP地址: {}:{}:{}", remoteIp, remotePort, expires==null?"":expires.getExpires());
+			// 获取 From 头
+			FromHeader fromHeader1 = (FromHeader) clonedRequest.getHeader(FromHeader.NAME);
+			ViaHeader viaHeader1 = (ViaHeader) clonedRequest.getHeader(ViaHeader.NAME);
+			String received1 = viaHeader1.getReceived();
+			// 获取 URI
+			SipURI fromUri = (SipURI) fromHeader1.getAddress().getURI();
+			// 设备的 SIP ID（username 部分）
+			String deviceId1 = fromUri.getUser();
+			// 主机部分（IP:端口）
+			String local_ip = fromUri.getHost();
+			int port = fromUri.getPort();
+			// tag（会话标识）
+			String tag = fromHeader1.getTag();
+			logger.info("===注册信息: 设备ID={}, 设备IP：{}，请求的Port:{},会话标识Tag:{}, received1:{}",deviceId1, local_ip,port, tag, received1);
 			// 如果想看完整的 SIP 请求内容
 			logger.debug("===SIP 注册报文:\n{}", request.toString());
 			Response response = null; 
@@ -125,6 +142,7 @@ public class RegisterRequestProcessor extends SIPRequestAbstractProcessor {
 				SipUri uri = (SipUri) address.getURI();
 				String deviceId = uri.getUser();
 				device = new Device();
+				device.setLocal_ip(local_ip);
 				//device.setStreamMode("UDP");
 				device.setStreamMode("TCP-PASSIVE");
 
@@ -157,15 +175,14 @@ public class RegisterRequestProcessor extends SIPRequestAbstractProcessor {
 			// 下发catelog查询目录
 			if (registerFlag == 1 && device != null) {
 				logger.info("注册成功! deviceId:" + device.getDeviceId());
-				// boolean exists = storager.exists(device.getDeviceId());
+				boolean exists = storager.exists(device.getDeviceId());
 				device.setRegisterTimeMillis(System.currentTimeMillis());
 				storager.updateDevice(device);
 				publisher.onlineEventPublish(device.getDeviceId(), VideoManagerConstants.EVENT_ONLINE_REGISTER);
-
 				// 重新注册更新设备和通道，以免设备替换或更新后信息无法更新
-				//if (!exists) {
+				if (!exists) {
 					handler.onRegister(device);
-				//}
+				}
 			} else if (registerFlag == 2) {
 				logger.info("注销成功! deviceId:" + device.getDeviceId());
 				publisher.outlineEventPublish(device.getDeviceId(), VideoManagerConstants.EVENT_OUTLINE_UNREGISTER);

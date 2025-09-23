@@ -71,3 +71,7 @@ QQ私信一般不回, 精力有限.欢迎大家在群里讨论.
 # 致谢
 感谢作者[夏楚](https://github.com/xiongziliang) 提供这么棒的开源流媒体服务框架  
 
+数据库添加
+ALTER TABLE device ADD COLUMN local_ip TEXT NOT NULL DEFAULT '0.0.0.0';
+
+
