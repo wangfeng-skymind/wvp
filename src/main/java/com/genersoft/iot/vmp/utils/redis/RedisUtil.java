@@ -704,7 +704,7 @@ public class RedisUtil {
      * @param query 查询参数
      * @return
      */
-    public List<Object> scan(String query) {
+/*    public List<Object> scan(String query) {
         Set<String> keys = (Set<String>) redisTemplate.execute((RedisCallback<Set<String>>) connection -> {
             Set<String> keysTmp = new HashSet<>();
             Cursor<byte[]> cursor = connection.scan(new ScanOptions.ScanOptionsBuilder().match(query).count(1000).build());
@@ -712,7 +712,29 @@ public class RedisUtil {
                 keysTmp.add(new String(cursor.next()));
             }
             return keysTmp;
-        });
+        });*/
+    public List<Object> scan(String query) {
+        Set<String> keys = (Set<String>) redisTemplate.execute(
+                (RedisCallback<Set<String>>) connection -> {
+
+                    Set<String> keysTmp = new HashSet<>();
+
+                    ScanOptions options = ScanOptions.scanOptions()
+                            .match(query)
+                            .count(1000)
+                            .build();
+
+                    Cursor<byte[]> cursor = connection.scan(options);
+
+                    while (cursor.hasNext()) {
+                        keysTmp.add(new String(cursor.next()));
+                    }
+
+                    return keysTmp;
+                }
+        );
+
+
 //        Set<String> keys = (Set<String>) redisTemplate.execute(new RedisCallback<Set<String>>(){
 //
 //            @Override

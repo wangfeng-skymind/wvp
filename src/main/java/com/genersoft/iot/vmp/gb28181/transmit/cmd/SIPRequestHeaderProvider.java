@@ -12,6 +12,7 @@ import javax.sip.address.SipURI;
 import javax.sip.header.*;
 import javax.sip.message.Request;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -24,6 +25,7 @@ import com.genersoft.iot.vmp.gb28181.bean.Device;
  * @author: swwheihei
  * @date: 2020年5月6日 上午9:29:02
  */
+@Slf4j
 @Component
 public class SIPRequestHeaderProvider {
 
@@ -42,6 +44,7 @@ public class SIPRequestHeaderProvider {
 	private SipProvider udpSipProvider;
 	
 	public Request createMessageRequest(Device device, String content, String viaTag, String fromTag, String toTag) throws ParseException, InvalidArgumentException, PeerUnavailableException {
+		log.info("SIP.createMessageRequest==content==" + content +">===viaTag=>>"+ viaTag +">==fromTag==>>" + fromTag +">===toTag=>>" + toTag);
 		Request request = null;
 		// sipuri
 		SipURI requestURI = sipFactory.createAddressFactory().createSipURI(device.getDeviceId(), device.getHostAddress());
@@ -76,6 +79,8 @@ public class SIPRequestHeaderProvider {
 	}
 	
 	public Request createInviteRequest(Device device, String channelId, String content, String viaTag, String fromTag, String toTag, String ssrc) throws ParseException, InvalidArgumentException, PeerUnavailableException {
+		log.info("SIP.createInviteRequest==device==" + device +">===channelId=>>"+ channelId + ">===content=>>"+ content +">===viaTag=>>"+ viaTag +">==fromTag==>>" + fromTag +">===toTag=>>" + toTag);
+
 		Request request = null;
 		//请求行
 		SipURI requestLine = sipFactory.createAddressFactory().createSipURI(channelId, device.getHostAddress());
@@ -122,6 +127,9 @@ public class SIPRequestHeaderProvider {
 	}
 	
 	public Request createPlaybackInviteRequest(Device device, String channelId, String content, String viaTag, String fromTag, String toTag) throws ParseException, InvalidArgumentException, PeerUnavailableException {
+		log.info("SIP.createPlaybackInviteRequest==device==" + device +">===channelId=>>"+ channelId +">===content=>>"+ content +">===viaTag=>>"+ viaTag +">==fromTag==>>" + fromTag +">===toTag=>>" + toTag);
+
+
 		Request request = null;
 		//请求行
 		SipURI requestLine = sipFactory.createAddressFactory().createSipURI(device.getDeviceId(), device.getHostAddress());
@@ -165,6 +173,8 @@ public class SIPRequestHeaderProvider {
 	}
 
 	public Request createSubscribeRequest(Device device, String content, String viaTag, String fromTag, String toTag, Integer expires, String event) throws ParseException, InvalidArgumentException, PeerUnavailableException {
+		log.info("SIP.createSubscribeRequest==device==" + device +">===content=>>"+ content +">===viaTag=>>"+ viaTag +">==fromTag==>>" + fromTag +">===toTag=>>" + toTag);
+
 		Request request = null;
 		// sipuri
 		SipURI requestURI = sipFactory.createAddressFactory().createSipURI(device.getDeviceId(), device.getHostAddress());

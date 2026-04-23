@@ -19,6 +19,7 @@ import com.genersoft.iot.vmp.media.zlm.ZLMHttpHookSubscribe;
 import com.genersoft.iot.vmp.media.zlm.ZLMRTPServerFactory;
 import com.genersoft.iot.vmp.storager.IRedisCatchStorage;
 import com.genersoft.iot.vmp.storager.IVideoManagerStorager;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,7 @@ import com.genersoft.iot.vmp.gb28181.utils.XmlUtil;
  * @author: swwheihei
  * @date:   2020年5月3日 下午9:22:48     
  */
-
+@Slf4j
 @Component
 public class SIPCommander implements ISIPCommander {
 

@@ -95,7 +95,7 @@ public class SipLayer implements SipListener {
 			tcpListeningPoint = sipStack.createListeningPoint(sipConfig.getSipIp(), sipConfig.getSipPort(), "TCP");
 			tcpSipProvider = sipStack.createSipProvider(tcpListeningPoint);
 			tcpSipProvider.addSipListener(this);
-			logger.info("Sip Server TCP 启动成功 port {" + sipConfig.getSipPort() + "}");
+			logger.info("Sip Server TCP xxx 启动成功 port {" + sipConfig.getSipPort() + "}");
 		} catch (TransportNotSupportedException | InvalidArgumentException | TooManyListenersException | ObjectInUseException e) {
 			logger.error(String.format("创建SIP服务失败: %s", e.getMessage()));
 		}
@@ -108,7 +108,7 @@ public class SipLayer implements SipListener {
 		ListeningPoint udpListeningPoint = sipStack.createListeningPoint(sipConfig.getSipIp(), sipConfig.getSipPort(), "UDP");
 		SipProvider udpSipProvider = sipStack.createSipProvider(udpListeningPoint);
 		udpSipProvider.addSipListener(this);
-		logger.info("Sip Server UDP 启动成功 port {" + sipConfig.getSipPort() + "}");
+		logger.info("Sip Server UDP yyy 启动成功 port {" + sipConfig.getSipPort() + "}");
 		return udpSipProvider;
 	}
 

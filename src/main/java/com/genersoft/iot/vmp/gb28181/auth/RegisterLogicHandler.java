@@ -1,6 +1,7 @@
 package com.genersoft.iot.vmp.gb28181.auth;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import com.genersoft.iot.vmp.gb28181.bean.Device;
@@ -14,6 +15,7 @@ import com.genersoft.iot.vmp.gb28181.transmit.cmd.impl.SIPCommander;
 @Component
 public class RegisterLogicHandler {
 
+	@Lazy
 	@Autowired
 	private SIPCommander cmder;
 	
