@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import com.genersoft.iot.vmp.conf.SipConfig;
@@ -33,6 +34,7 @@ public class SipLayer implements SipListener {
 	@Autowired
 	private SipConfig sipConfig;
 
+	@Lazy
 	@Autowired
 	private SIPProcessorFactory processorFactory;
 

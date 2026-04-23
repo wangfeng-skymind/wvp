@@ -3,6 +3,7 @@ package com.genersoft.iot.vmp.vmanager.device;
 import com.genersoft.iot.vmp.gb28181.bean.DeviceChannel;
 import com.genersoft.iot.vmp.gb28181.transmit.callback.RequestMessage;
 import com.github.pagehelper.PageInfo;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import com.genersoft.iot.vmp.storager.IVideoManagerStorager;
 import javax.sip.message.Response;
 
 @SuppressWarnings("rawtypes")
+@Slf4j
 @CrossOrigin
 @RestController
 @RequestMapping("/api")
@@ -54,7 +56,7 @@ public class DeviceQuery {
 	
 	@GetMapping("/devices")
 	public PageInfo<Device> devices(int page, int count){
-		
+		log.info("调用接口查询设备>>>>>>>>>>>>>>>>>>>>>>查询设备===");
 		if (logger.isDebugEnabled()) {
 			logger.debug("查询所有视频设备API调用");
 		}

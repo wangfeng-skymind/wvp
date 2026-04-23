@@ -64,7 +64,8 @@ public class SIPProcessorFactory {
 	
 	@Autowired
 	private EventPublisher publisher;
-	
+
+	@Lazy
 	@Autowired
 	private SIPCommander cmder;
 	

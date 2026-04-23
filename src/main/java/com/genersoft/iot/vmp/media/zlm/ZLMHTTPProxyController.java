@@ -31,7 +31,7 @@ public class ZLMHTTPProxyController {
     private int mediaHttpPort;
 
     @ResponseBody
-    @RequestMapping(value = "/**/**/**", produces = "application/json;charset=UTF-8")
+    @RequestMapping(value = "/**", produces = "application/json;charset=UTF-8")
     public Object proxy(HttpServletRequest request, HttpServletResponse response){
 
         if (redisCatchStorage.getMediaInfo() == null) {
