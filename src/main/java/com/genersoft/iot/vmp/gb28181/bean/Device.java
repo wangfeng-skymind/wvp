@@ -1,11 +1,39 @@
 package com.genersoft.iot.vmp.gb28181.bean;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.annotations.ApiModel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.apache.ibatis.annotations.Select;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "device_remote")
+@ApiModel(description = "设备远程表")
+@Data
 public class Device {
+
+/*
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	private Long device_id_;
+*/
+
 
 	/**
 	 * 设备Id
 	 */
+	@Id
 	private String deviceId;
 
 	/**
@@ -70,12 +98,21 @@ public class Device {
 	 * 注册时间
 	 */
 	private Long registerTimeMillis;
+	private LocalDateTime update_time;
 
 	/**
 	 * 通道个数
 	 */
 	private int channelCount;
+	@OneToMany(fetch = FetchType.LAZY) // 或 FetchType.EAGER 自动加载
+	@JoinColumn(name = "deviceId", insertable = false, updatable = false)
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+	private List<DeviceChannel> channels;
 
+
+
+
+/*
 	public String getLocal_ip() {
 		return local_ip;
 	}
@@ -186,5 +223,5 @@ public class Device {
 
 	public void setRegisterTimeMillis(Long registerTimeMillis) {
 		this.registerTimeMillis = registerTimeMillis;
-	}
+	}*/
 }

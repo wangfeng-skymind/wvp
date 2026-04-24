@@ -11,7 +11,7 @@ import java.util.List;
  */
 @Mapper
 @Repository
-public interface DeviceMapper {
+public interface DeviceMapper1 {
 
     @Select("SELECT * FROM device WHERE deviceId = #{deviceId}")
     Device getDeviceByDeviceId(String deviceId);

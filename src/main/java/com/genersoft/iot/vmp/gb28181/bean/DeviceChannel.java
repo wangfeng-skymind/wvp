@@ -1,8 +1,26 @@
 package com.genersoft.iot.vmp.gb28181.bean;
 
+
+import io.swagger.annotations.ApiModel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+
+@Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "device_channel")
+@ApiModel(description = "device_channel表")
 public class DeviceChannel {
 
-
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long device_channel_id;
 
 	/**
 	 * 通道id

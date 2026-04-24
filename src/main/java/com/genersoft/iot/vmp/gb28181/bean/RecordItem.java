@@ -1,8 +1,17 @@
 package com.genersoft.iot.vmp.gb28181.bean;
 
 
+import io.swagger.annotations.ApiModel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import javax.persistence.Id;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -12,7 +21,17 @@ import java.util.Date;
  * @author: swwheihei
  * @date:   2020年5月8日 下午2:06:54     
  */
+@Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity(name = "record_item")
+@ApiModel(description = "record_item表")
 public class RecordItem  implements Comparable<RecordItem>{
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long record_item_id;
 
 	private String deviceId;
 	

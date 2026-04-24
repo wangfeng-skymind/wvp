@@ -5,7 +5,8 @@ import com.genersoft.iot.vmp.common.VideoManagerConstants;
 import com.genersoft.iot.vmp.conf.MediaServerConfig;
 import com.genersoft.iot.vmp.gb28181.bean.DeviceChannel;
 import com.genersoft.iot.vmp.storager.IRedisCatchStorage;
-import com.genersoft.iot.vmp.storager.dao.DeviceChannelMapper;
+//import com.genersoft.iot.vmp.storager.dao.DeviceChannelMapper;
+import com.genersoft.iot.vmp.storager.repository.IDeviceChannelRepository;
 import com.genersoft.iot.vmp.utils.redis.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,8 +21,11 @@ public class RedisCatchStorageImpl implements IRedisCatchStorage {
     @Autowired
 	private RedisUtil redis;
 
+   // @Autowired
+    //private DeviceChannelMapper deviceChannelMapper;
+
     @Autowired
-    private DeviceChannelMapper deviceChannelMapper;
+    private IDeviceChannelRepository deviceChannelMapper;
 
 
     /**
@@ -129,11 +133,11 @@ public class RedisCatchStorageImpl implements IRedisCatchStorage {
     @Override
     public boolean stopPlayback(StreamInfo streamInfo) {
         if (streamInfo == null) return false;
-        DeviceChannel deviceChannel = deviceChannelMapper.queryChannel(streamInfo.getDeviceID(), streamInfo.getChannelId());
+        DeviceChannel deviceChannel = deviceChannelMapper.queryChannel(streamInfo.getDeviceID(), streamInfo.getChannelId()).get();
         if (deviceChannel != null) {
             deviceChannel.setStreamId(null);
             deviceChannel.setDeviceId(streamInfo.getDeviceID());
-            deviceChannelMapper.update(deviceChannel);
+            deviceChannelMapper.save(deviceChannel);
         }
         return redis.del(String.format("%S_%s_%s_%s", VideoManagerConstants.PLAY_BLACK_PREFIX,
                 streamInfo.getStreamId(),

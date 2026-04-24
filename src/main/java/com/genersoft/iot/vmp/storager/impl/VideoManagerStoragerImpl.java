@@ -1,12 +1,17 @@
 package com.genersoft.iot.vmp.storager.impl;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import com.genersoft.iot.vmp.gb28181.bean.DeviceChannel;
 import com.genersoft.iot.vmp.gb28181.bean.MobilePosition;
-import com.genersoft.iot.vmp.storager.dao.DeviceChannelMapper;
+/*import com.genersoft.iot.vmp.storager.dao.DeviceChannelMapper;
 import com.genersoft.iot.vmp.storager.dao.DeviceMapper;
-import com.genersoft.iot.vmp.storager.dao.DeviceMobilePositionMapper;
+import com.genersoft.iot.vmp.storager.dao.DeviceMobilePositionMapper;*/
+import com.genersoft.iot.vmp.storager.repository.IDeviceChannelRepository;
+ import com.genersoft.iot.vmp.storager.repository.IDeviceRepository;
+import com.genersoft.iot.vmp.storager.repository.IMobilePositionRepository;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,14 +29,20 @@ import com.genersoft.iot.vmp.storager.IVideoManagerStorager;
 @Component
 public class VideoManagerStoragerImpl implements IVideoManagerStorager {
 
-	@Autowired
+/*	@Autowired
     private DeviceMapper deviceMapper;
-
 	@Autowired
 	private DeviceChannelMapper deviceChannelMapper;
-	
 	@Autowired
-	private DeviceMobilePositionMapper deviceMobilePositionMapper;
+	private DeviceMobilePositionMapper deviceMobilePositionMapper;*/
+
+	@Autowired
+	private IDeviceRepository deviceMapper;
+	@Autowired
+	private IDeviceChannelRepository deviceChannelMapper;
+
+	@Autowired
+	private IMobilePositionRepository deviceMobilePositionMapper;
 
 
 	/**
@@ -42,7 +53,9 @@ public class VideoManagerStoragerImpl implements IVideoManagerStorager {
 	 */
 	@Override
 	public boolean exists(String deviceId) {
-		return deviceMapper.getDeviceByDeviceId(deviceId) != null;
+		Device re = deviceMapper.getByDeviceId(deviceId).orElse(null);
+
+		return re != null;
 	}
 
 	/**
@@ -53,7 +66,9 @@ public class VideoManagerStoragerImpl implements IVideoManagerStorager {
 	 */
 	@Override
 	public synchronized boolean create(Device device) {
-		return deviceMapper.add(device) > 0;
+		device = deviceMapper.save(device);
+
+		return device.getDeviceId() != null? true : false;
 	}
 
 
@@ -66,24 +81,30 @@ public class VideoManagerStoragerImpl implements IVideoManagerStorager {
 	 */
 	@Override
 	public synchronized boolean updateDevice(Device device) {
-		Device deviceByDeviceId = deviceMapper.getDeviceByDeviceId(device.getDeviceId());
-		if (deviceByDeviceId == null) {
-			return deviceMapper.add(device) > 0;
-		}else {
-			return deviceMapper.update(device) > 0;
-		}
 
+		Device deviceByDeviceId = deviceMapper.findByDeviceId(device.getDeviceId()).orElse(null);
+		if (deviceByDeviceId == null) {
+			deviceMapper.save(device);
+			return device.getDeviceId() != null? true : false;
+
+		}else {
+			device.setUpdate_time(LocalDateTime.now());
+			deviceMapper.save(device);
+			return device.getDeviceId() != null? true : false;
+
+		}
 	}
 
 	@Override
 	public synchronized void updateChannel(String deviceId, DeviceChannel channel) {
 		String channelId = channel.getChannelId();
 		channel.setDeviceId(deviceId);
-		DeviceChannel deviceChannel = deviceChannelMapper.queryChannel(deviceId, channelId);
+		DeviceChannel deviceChannel = deviceChannelMapper.queryChannel(deviceId, channelId).orElse(null);;
+
 		if (deviceChannel == null) {
-			deviceChannelMapper.add(channel);
+			deviceChannelMapper.save(channel);
 		}else {
-			deviceChannelMapper.update(channel);
+			deviceChannelMapper.save(channel);
 		}
 	}
 
@@ -105,7 +126,7 @@ public class VideoManagerStoragerImpl implements IVideoManagerStorager {
 	 */
 	@Override
 	public Device queryVideoDevice(String deviceId) {
-		return deviceMapper.getDeviceByDeviceId(deviceId);
+		return deviceMapper.findByDeviceId(deviceId).orElse(null);
 	}
 
 	@Override
@@ -120,7 +141,6 @@ public class VideoManagerStoragerImpl implements IVideoManagerStorager {
 	public List<DeviceChannel> queryChannelsByDeviceId(String deviceId) {
 		return deviceChannelMapper.queryChannelsByDeviceId(deviceId, null,null, null, null);
 	}
-
 	@Override
 	public PageInfo<DeviceChannel> querySubChannels(String deviceId, String parentChannelId, String query, Boolean hasSubChannel, String online, int page, int count) {
 		PageHelper.startPage(page, count);
@@ -130,7 +150,7 @@ public class VideoManagerStoragerImpl implements IVideoManagerStorager {
 
 	@Override
 	public DeviceChannel queryChannel(String deviceId, String channelId) {
-		return deviceChannelMapper.queryChannel(deviceId, channelId);
+		return deviceChannelMapper.queryChannel(deviceId, channelId).orElse(null);
 	}
 
 
@@ -144,7 +164,7 @@ public class VideoManagerStoragerImpl implements IVideoManagerStorager {
 	@Override
 	public PageInfo<Device> queryVideoDeviceList(int page, int count) {
 		PageHelper.startPage(page, count);
-		List<Device> all = deviceMapper.getDevices();
+		List<Device> all = deviceMapper.findAll();
 		System.out.println(page + ">>>>"+count+">>>设备数量===" + all != null ? all.size() : 0);
 		return new PageInfo<>(all);
 	}
@@ -157,7 +177,12 @@ public class VideoManagerStoragerImpl implements IVideoManagerStorager {
 	@Override
 	public List<Device> queryVideoDeviceList() {
 
-		List<Device> deviceList =  deviceMapper.getDevices();
+		//List<Device> deviceList =  deviceMapper.getDevices();
+		List<Device> deviceList =  deviceMapper.findAll();
+		if (deviceList != null && deviceList.size() > 0) {
+
+		}
+
 		return deviceList;
 	}
 
@@ -169,7 +194,7 @@ public class VideoManagerStoragerImpl implements IVideoManagerStorager {
 	 */
 	@Override
 	public boolean delete(String deviceId) {
-		int result = deviceMapper.del(deviceId);
+		int result = deviceMapper.deleteByDeviceId(deviceId);
 
 		return result > 0;
 	}
@@ -182,13 +207,14 @@ public class VideoManagerStoragerImpl implements IVideoManagerStorager {
 	 */
 	@Override
 	public synchronized boolean online(String deviceId) {
-		Device device = deviceMapper.getDeviceByDeviceId(deviceId);
+		Device device = deviceMapper.getByDeviceId(deviceId).orElse(null);;
 		if (device == null) {
 			return false;
 		}
 		device.setOnline(1);
 		System.out.println("更新设备在线");
-		return deviceMapper.update(device) > 0;
+		device =  deviceMapper.save(device);
+		return device.getDeviceId() != null? true : false;
 	}
 
 	/**
@@ -199,13 +225,14 @@ public class VideoManagerStoragerImpl implements IVideoManagerStorager {
 	 */
 	@Override
 	public synchronized boolean outline(String deviceId) {
-		Device device = deviceMapper.getDeviceByDeviceId(deviceId);
+		Device device = deviceMapper.findByDeviceId(deviceId).orElse(null);;
 		if(device == null){
 			return true;
 		}
 		device.setOnline(0);
 		System.out.println("更新设备离线");
-		return deviceMapper.update(device) > 0;
+		Device re =  deviceMapper.save(device);
+		return re != null;
 	}
 
 	/**
@@ -214,7 +241,7 @@ public class VideoManagerStoragerImpl implements IVideoManagerStorager {
 	 */
 	@Override
 	public void cleanChannelsForDevice(String deviceId) {
-		deviceChannelMapper.cleanChannelsByDeviceId(deviceId);
+		deviceChannelMapper.deleteByDeviceId(deviceId);
 	}
 
 	/**
@@ -223,7 +250,9 @@ public class VideoManagerStoragerImpl implements IVideoManagerStorager {
 	 */
 	@Override
 	public synchronized boolean insertMobilePosition(MobilePosition mobilePosition) {
-		return deviceMobilePositionMapper.insertNewPosition(mobilePosition) > 0;
+		MobilePosition re =  deviceMobilePositionMapper.save(mobilePosition);
+		return re != null;
+
 	}
 
 	/**
@@ -234,7 +263,12 @@ public class VideoManagerStoragerImpl implements IVideoManagerStorager {
 	 */
 	@Override
 	public synchronized List<MobilePosition> queryMobilePositions(String deviceId, String startTime, String endTime) {
-		return deviceMobilePositionMapper.queryPositionByDeviceIdAndTime(deviceId, startTime, endTime);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+		LocalDateTime start = startTime == null ? null : LocalDateTime.parse(startTime, formatter);
+		LocalDateTime end = endTime == null ? null : LocalDateTime.parse(endTime, formatter);
+
+		return deviceMobilePositionMapper.queryPositionByDeviceIdAndTime(deviceId, start, end);
 	}
 
 	/**
@@ -243,7 +277,7 @@ public class VideoManagerStoragerImpl implements IVideoManagerStorager {
 	 */
 	@Override
 	public MobilePosition queryLatestPosition(String deviceId) {
-		return deviceMobilePositionMapper.queryLatestPositionByDevice(deviceId);
+		return deviceMobilePositionMapper.queryTopByDeviceIdOrderByTimeDesc(deviceId).orElse(null);
 	}
 
 	/**
@@ -251,6 +285,6 @@ public class VideoManagerStoragerImpl implements IVideoManagerStorager {
 	 * @param deviceId
 	 */
 	public int clearMobilePositionsByDeviceId(String deviceId) {
-		return deviceMobilePositionMapper.clearMobilePositionsByDeviceId(deviceId);
+		return deviceMobilePositionMapper.deleteByDeviceId(deviceId);
 	}
 }

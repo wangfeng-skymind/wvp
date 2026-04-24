@@ -60,8 +60,12 @@ public class DeviceQuery {
 		if (logger.isDebugEnabled()) {
 			logger.debug("查询所有视频设备API调用");
 		}
-		
-		return storager.queryVideoDeviceList(page, count);
+
+		PageInfo<Device> re = storager.queryVideoDeviceList(page, count);
+		re.getList().forEach(device -> {
+			logger.info("====查询的device===" + device);
+		});
+		return re;
 	}
 
 	/**

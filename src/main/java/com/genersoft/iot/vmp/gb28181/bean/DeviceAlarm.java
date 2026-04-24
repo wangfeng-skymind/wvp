@@ -1,8 +1,26 @@
 package com.genersoft.iot.vmp.gb28181.bean;
 
+import io.swagger.annotations.ApiModel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import javax.persistence.Id;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+
+@Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity(name = "device_alarm")
+@ApiModel(description = "device_alarm表")
 public class DeviceAlarm {
-
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long device_alarm_id;
 	/**
 	 * 设备Id
 	 */

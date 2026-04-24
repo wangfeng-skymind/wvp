@@ -1,12 +1,31 @@
 package com.genersoft.iot.vmp.gb28181.bean;
 
+import io.swagger.annotations.ApiModel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+
 /**
  * @Description: 移动位置bean
  * @author: lawrencehj
  * @date: 2021年1月23日
  */
 
+@Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "mobile_position")
+@ApiModel(description = "mobile_position表")
 public class MobilePosition {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long mobile_position_id;
     /**
      * 设备Id
      */

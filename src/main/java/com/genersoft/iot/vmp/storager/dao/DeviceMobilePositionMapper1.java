@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.*;
 
 @Mapper
 //@Repository
-public interface DeviceMobilePositionMapper {
+public interface DeviceMobilePositionMapper1 {
 
     @Insert("INSERT INTO device_mobile_position (deviceId, deviceName, time, longitude, latitude, altitude, speed, direction, reportSource, geodeticSystem, cnLng, cnLat) " +
             "VALUES ('${deviceId}', '${deviceName}', '${time}', ${longitude}, ${latitude}, ${altitude}, ${speed}, ${direction}, '${reportSource}', '${geodeticSystem}', '${cnLng}', '${cnLat}')")

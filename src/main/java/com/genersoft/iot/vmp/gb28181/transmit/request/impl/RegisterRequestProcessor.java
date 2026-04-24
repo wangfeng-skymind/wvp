@@ -98,6 +98,7 @@ public class RegisterRequestProcessor extends SIPRequestAbstractProcessor {
 				passwordCorrect = new DigestServerAuthenticationHelper().doAuthenticatePlainTextPassword(request,
 						sipConfig.getSipPassword());
 			}
+			logger.debug("===SIP 注册报文 密码:\n{},密码是否正确:{},头信息：{}", sipConfig.getSipPassword(),passwordCorrect,authorhead);
 
 			// 未携带授权头或者密码错误 回复401
 			if (authorhead == null || !passwordCorrect) {
@@ -141,6 +142,8 @@ public class RegisterRequestProcessor extends SIPRequestAbstractProcessor {
 				AddressImpl address = (AddressImpl) fromHeader.getAddress();
 				SipUri uri = (SipUri) address.getURI();
 				String deviceId = uri.getUser();
+				logger.debug("===SIP 注册报文 uri:\n{},deviceId:{},address：{}",uri,deviceId,address);
+
 				device = new Device();
 				device.setLocal_ip(local_ip);
 				//device.setStreamMode("UDP");

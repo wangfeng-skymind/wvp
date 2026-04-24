@@ -9,7 +9,7 @@ import java.util.List;
  * 用于存储设备通道信息
  */
 @Mapper
-public interface DeviceChannelMapper {
+public interface DeviceChannelMapper1 {
 
     @Insert("INSERT INTO device_channel (channelId, deviceId, name, manufacture, model, owner, civilCode, block, " +
             "address, parental, parentId, safetyWay, registerWay, certNum, certifiable, errCode, secrecy, " +
