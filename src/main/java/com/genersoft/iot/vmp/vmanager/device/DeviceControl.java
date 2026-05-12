@@ -10,7 +10,7 @@ package com.genersoft.iot.vmp.vmanager.device;
 import javax.sip.message.Response;
 
 import com.alibaba.fastjson.JSONObject;
-import com.genersoft.iot.vmp.gb28181.bean.Device;
+import com.genersoft.iot.vmp.gb28181.bean.DeviceRemoteDefinition;
 import com.genersoft.iot.vmp.gb28181.transmit.callback.DeferredResultHolder;
 import com.genersoft.iot.vmp.gb28181.transmit.callback.RequestMessage;
 import com.genersoft.iot.vmp.gb28181.transmit.cmd.impl.SIPCommander;
@@ -52,7 +52,7 @@ public class DeviceControl {
         if (logger.isDebugEnabled()) {
             logger.debug("设备远程启动API调用");
         }
-        Device device = storager.queryVideoDevice(deviceId);
+        DeviceRemoteDefinition device = storager.queryVideoDevice(deviceId);
         boolean sucsess = cmder.teleBootCmd(device);
         if (sucsess) {
             JSONObject json = new JSONObject();
@@ -78,7 +78,7 @@ public class DeviceControl {
         if (logger.isDebugEnabled()) {
             logger.debug("开始/停止录像API调用");
         }
-        Device device = storager.queryVideoDevice(deviceId);
+        DeviceRemoteDefinition device = storager.queryVideoDevice(deviceId);
         cmder.recordCmd(device, channelId, recordCmdStr, event -> {
             Response response = event.getResponse();
             RequestMessage msg = new RequestMessage();
@@ -92,7 +92,7 @@ public class DeviceControl {
 			// 释放rtpserver
 			RequestMessage msg = new RequestMessage();
 			msg.setId(DeferredResultHolder.CALLBACK_CMD_DEVICECONTROL + (XmlUtil.isEmpty(channelId) ? deviceId : channelId));
-			msg.setData("Timeout. Device did not response to this command.");
+			msg.setData("Timeout. DeviceRemoteDefinition did not response to this command.");
 			resultHolder.invokeResult(msg);
 		});
 		resultHolder.put(DeferredResultHolder.CALLBACK_CMD_DEVICECONTROL + (XmlUtil.isEmpty(channelId) ? deviceId : channelId), result);
@@ -110,7 +110,7 @@ public class DeviceControl {
 		if (logger.isDebugEnabled()) {
 			logger.debug("布防/撤防API调用");
 		}
-		Device device = storager.queryVideoDevice(deviceId);
+		DeviceRemoteDefinition device = storager.queryVideoDevice(deviceId);
 		cmder.guardCmd(device, guardCmdStr, event -> {
 			Response response = event.getResponse();
 			RequestMessage msg = new RequestMessage();
@@ -124,7 +124,7 @@ public class DeviceControl {
 			// 释放rtpserver
 			RequestMessage msg = new RequestMessage();
 			msg.setId(DeferredResultHolder.CALLBACK_CMD_DEVICECONTROL + deviceId);
-			msg.setData("Timeout. Device did not response to this command.");
+			msg.setData("Timeout. DeviceRemoteDefinition did not response to this command.");
 			resultHolder.invokeResult(msg);
 		});
 		resultHolder.put(DeferredResultHolder.CALLBACK_CMD_DEVICECONTROL + deviceId, result);
@@ -145,7 +145,7 @@ public class DeviceControl {
 		if (logger.isDebugEnabled()) {
 			logger.debug("报警复位API调用");
 		}
-		Device device = storager.queryVideoDevice(deviceId);
+		DeviceRemoteDefinition device = storager.queryVideoDevice(deviceId);
 		cmder.alarmCmd(device, alarmMethod, alarmType, event -> {
 			Response response = event.getResponse();
 			RequestMessage msg = new RequestMessage();
@@ -159,7 +159,7 @@ public class DeviceControl {
 			// 释放rtpserver
 			RequestMessage msg = new RequestMessage();
 			msg.setId(DeferredResultHolder.CALLBACK_CMD_DEVICECONTROL + deviceId);
-			msg.setData("Timeout. Device did not response to this command.");
+			msg.setData("Timeout. DeviceRemoteDefinition did not response to this command.");
 			resultHolder.invokeResult(msg);
 		});
 		resultHolder.put(DeferredResultHolder.CALLBACK_CMD_DEVICECONTROL + deviceId, result);
@@ -179,7 +179,7 @@ public class DeviceControl {
 		if (logger.isDebugEnabled()) {
 			logger.debug("强制关键帧API调用");
 		}
-		Device device = storager.queryVideoDevice(deviceId);
+		DeviceRemoteDefinition device = storager.queryVideoDevice(deviceId);
 		boolean sucsess = cmder.iFrameCmd(device, channelId);
 		if (sucsess) {
 			JSONObject json = new JSONObject();
@@ -211,7 +211,7 @@ public class DeviceControl {
         if (logger.isDebugEnabled()) {
 			logger.debug("报警复位API调用");
 		}
-		Device device = storager.queryVideoDevice(deviceId);
+		DeviceRemoteDefinition device = storager.queryVideoDevice(deviceId);
 		cmder.homePositionCmd(device, channelId, enabled, resetTime, presetIndex, event -> {
 			Response response = event.getResponse();
 			RequestMessage msg = new RequestMessage();

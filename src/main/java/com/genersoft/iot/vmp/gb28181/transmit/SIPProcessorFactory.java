@@ -100,7 +100,7 @@ public class SIPProcessorFactory {
 	public ISIPRequestProcessor createRequestProcessor(RequestEvent evt) {
 		Request request = evt.getRequest();
 		String method = request.getMethod();
-		System.out.println("接收到消息："+request.getMethod());
+		System.out.println("接收到消息：====createRequestProcessor=="+request.getMethod());
 //		sipSubscribe.getSubscribe(evt.getServerTransaction().getBranchId()).response(evt);
 		if (Request.INVITE.equals(method)) {
 			InviteRequestProcessor processor = new InviteRequestProcessor();

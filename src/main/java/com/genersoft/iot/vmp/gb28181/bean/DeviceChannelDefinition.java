@@ -6,17 +6,20 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "device_channel")
-@ApiModel(description = "device_channel表")
-public class DeviceChannel {
+@Table(name = "device_channel_definition")
+@ApiModel(description = "device_channel_definition表")
+public class DeviceChannelDefinition {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -201,6 +204,11 @@ public class DeviceChannel {
 				break;
 		}
 	}
+	@CreationTimestamp
+	@Column(name="create_time")
+	private LocalDateTime createTime; // 创建时间
+	@UpdateTimestamp
+	private LocalDateTime update_time;
 
 	public String getChannelId() {
 		return channelId;

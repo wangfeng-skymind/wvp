@@ -2,8 +2,8 @@ package com.genersoft.iot.vmp.vmanager.screenshot;
 
 import com.alibaba.fastjson.JSONObject;
 import com.genersoft.iot.vmp.common.StreamInfo;
-import com.genersoft.iot.vmp.gb28181.bean.Device;
-import com.genersoft.iot.vmp.gb28181.bean.DeviceChannel;
+import com.genersoft.iot.vmp.gb28181.bean.DeviceRemoteDefinition;
+import com.genersoft.iot.vmp.gb28181.bean.DeviceChannelDefinition;
 import com.genersoft.iot.vmp.gb28181.transmit.callback.DeferredResultHolder;
 import com.genersoft.iot.vmp.gb28181.transmit.callback.RequestMessage;
 import com.genersoft.iot.vmp.gb28181.transmit.cmd.impl.SIPCommander;
@@ -56,17 +56,17 @@ public class ScheduleSnapshotStartupListener implements ApplicationListener<Appl
             Thread.sleep(30000);
             logger.info("循环=====================================" + k++);
 
-            List<Device> devices = storager.queryVideoDeviceList();
+            List<DeviceRemoteDefinition> devices = storager.queryVideoDeviceList();
             for(int i = 0;devices!= null &&  i < devices.size(); i++) {
 
-                Device nvrDevice = devices.get(i);
+                DeviceRemoteDefinition nvrDevice = devices.get(i);
                 int online = nvrDevice.getOnline();
                 logger.info("设备id===DeviceID=="+nvrDevice.getDeviceId()+"==online==="+online);
 
                 if(online >= 1) {
-                    List<DeviceChannel> channels = storager.queryChannelsByDeviceId(nvrDevice.getDeviceId());
+                    List<DeviceChannelDefinition> channels = storager.queryChannelsByDeviceId(nvrDevice.getDeviceId());
                     for (int j = 0; channels != null && j < channels.size(); j++) {
-                        DeviceChannel channel = channels.get(j);
+                        DeviceChannelDefinition channel = channels.get(j);
                         String channelId = channel.getChannelId();
                         logger.info("==通道===channelId==="+channelId);
                         String uploadUrl = "http://zhijianyunjian.com/device-service/api/video/nvr_upload";

@@ -2531,7 +2531,7 @@ var ERRNO_MESSAGES = {
     73: "Connection timed out",
     74: "Text file busy",
     75: "Cross-device link",
-    100: "Device not a stream",
+    100: "DeviceRemoteDefinition not a stream",
     101: "Bad font file fmt",
     102: "Invalid slot",
     103: "Invalid request code",

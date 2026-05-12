@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.genersoft.iot.vmp.common.StreamInfo;
 import com.genersoft.iot.vmp.conf.MediaServerConfig;
-import com.genersoft.iot.vmp.gb28181.bean.DeviceChannel;
+import com.genersoft.iot.vmp.gb28181.bean.DeviceChannelDefinition;
 import com.genersoft.iot.vmp.gb28181.session.VideoStreamSessionManager;
 import com.genersoft.iot.vmp.gb28181.transmit.callback.DeferredResultHolder;
 import com.genersoft.iot.vmp.gb28181.transmit.callback.RequestMessage;
@@ -36,7 +36,7 @@ public class PlayServiceImpl implements IPlayService {
         msg.setId(DeferredResultHolder.CALLBACK_CMD_PlAY + uuid);
         StreamInfo streamInfo = onPublishHandler(resonse, deviceId, channelId, uuid);
         if (streamInfo != null) {
-            DeviceChannel deviceChannel = storager.queryChannel(deviceId, channelId);
+            DeviceChannelDefinition deviceChannel = storager.queryChannel(deviceId, channelId);
             if (deviceChannel != null) {
                 deviceChannel.setStreamId(streamInfo.getStreamId());
                 storager.startPlay(deviceId, channelId, streamInfo.getStreamId());

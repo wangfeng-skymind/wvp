@@ -2,8 +2,8 @@ package com.genersoft.iot.vmp.web;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.genersoft.iot.vmp.gb28181.bean.Device;
-import com.genersoft.iot.vmp.gb28181.bean.DeviceChannel;
+import com.genersoft.iot.vmp.gb28181.bean.DeviceRemoteDefinition;
+import com.genersoft.iot.vmp.gb28181.bean.DeviceChannelDefinition;
 // import com.genersoft.iot.vmp.gb28181.event.DeviceOffLineDetector;
 // import com.genersoft.iot.vmp.gb28181.transmit.callback.DeferredResultHolder;
 // import com.genersoft.iot.vmp.gb28181.transmit.cmd.impl.SIPCommander;
@@ -59,18 +59,18 @@ public class ApiDeviceController {
 
         logger.debug("查询所有视频设备API调用");
         JSONObject result = new JSONObject();
-        List<Device> devices;
+        List<DeviceRemoteDefinition> devices;
         if (start == null || limit ==null) {
             devices = storager.queryVideoDeviceList();
             result.put("DeviceCount", devices.size());
         }else {
-            PageInfo<Device> deviceList = storager.queryVideoDeviceList(start/limit, limit);
+            PageInfo<DeviceRemoteDefinition> deviceList = storager.queryVideoDeviceList(start/limit, limit);
             result.put("DeviceCount", deviceList.getTotal());
             devices = deviceList.getList();
         }
 
         JSONArray deviceJSONList = new JSONArray();
-        for (Device device : devices) {
+        for (DeviceRemoteDefinition device : devices) {
             JSONObject deviceJsonObject = new JSONObject();
             deviceJsonObject.put("ID", device.getDeviceId());
             deviceJsonObject.put("Name", device.getName());
@@ -108,24 +108,24 @@ public class ApiDeviceController {
         }
         JSONObject result = new JSONObject();
         // 查询设备是否存在
-        Device device = storager.queryVideoDevice(serial);
+        DeviceRemoteDefinition device = storager.queryVideoDevice(serial);
         if (device == null) {
             result.put("ChannelCount", 0);
             result.put("ChannelList", "[]");
             return result;
         }
-        List<DeviceChannel> deviceChannels;
+        List<DeviceChannelDefinition> deviceChannels;
         if (start == null || limit ==null) {
             deviceChannels = storager.queryChannelsByDeviceId(serial);
             result.put("ChannelCount", deviceChannels.size());
         }else {
-            PageInfo<DeviceChannel> pageResult = storager.queryChannelsByDeviceId(serial, null, null, null,start/limit, limit);
+            PageInfo<DeviceChannelDefinition> pageResult = storager.queryChannelsByDeviceId(serial, null, null, null,start/limit, limit);
             result.put("ChannelCount", pageResult.getTotal());
             deviceChannels = pageResult.getList();
         }
 
         JSONArray channleJSONList = new JSONArray();
-        for (DeviceChannel deviceChannel : deviceChannels) {
+        for (DeviceChannelDefinition deviceChannel : deviceChannels) {
             JSONObject deviceJOSNChannel = new JSONObject();
             deviceJOSNChannel.put("ID", deviceChannel.getChannelId());
             deviceJOSNChannel.put("DeviceID", device.getDeviceId());

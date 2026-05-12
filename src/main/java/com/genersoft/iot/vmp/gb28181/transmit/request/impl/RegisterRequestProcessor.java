@@ -29,7 +29,7 @@ import com.genersoft.iot.vmp.common.VideoManagerConstants;
 import com.genersoft.iot.vmp.conf.SipConfig;
 import com.genersoft.iot.vmp.gb28181.auth.DigestServerAuthenticationHelper;
 import com.genersoft.iot.vmp.gb28181.auth.RegisterLogicHandler;
-import com.genersoft.iot.vmp.gb28181.bean.Device;
+import com.genersoft.iot.vmp.gb28181.bean.DeviceRemoteDefinition;
 import com.genersoft.iot.vmp.gb28181.event.EventPublisher;
 import com.genersoft.iot.vmp.gb28181.transmit.request.SIPRequestAbstractProcessor;
 import com.genersoft.iot.vmp.storager.IVideoManagerStorager;
@@ -91,7 +91,7 @@ public class RegisterRequestProcessor extends SIPRequestAbstractProcessor {
 			boolean passwordCorrect = false;
 			// 注册标志  0：未携带授权头或者密码错误  1：注册成功   2：注销成功
 			int registerFlag = 0;
-			Device device = null;
+			DeviceRemoteDefinition device = null;
 			AuthorizationHeader authorhead = (AuthorizationHeader) request.getHeader(AuthorizationHeader.NAME); 
 			// 校验密码是否正确
 			if (authorhead != null) {
@@ -144,7 +144,7 @@ public class RegisterRequestProcessor extends SIPRequestAbstractProcessor {
 				String deviceId = uri.getUser();
 				logger.debug("===SIP 注册报文 uri:\n{},deviceId:{},address：{}",uri,deviceId,address);
 
-				device = new Device();
+				device = new DeviceRemoteDefinition();
 				device.setLocal_ip(local_ip);
 				//device.setStreamMode("UDP");
 				device.setStreamMode("TCP-PASSIVE");

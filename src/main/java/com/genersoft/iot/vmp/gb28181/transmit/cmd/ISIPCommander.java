@@ -1,6 +1,6 @@
 package com.genersoft.iot.vmp.gb28181.transmit.cmd;
 
-import com.genersoft.iot.vmp.gb28181.bean.Device;
+import com.genersoft.iot.vmp.gb28181.bean.DeviceRemoteDefinition;
 import com.genersoft.iot.vmp.gb28181.event.SipSubscribe;
 import com.genersoft.iot.vmp.media.zlm.ZLMHttpHookSubscribe;
 
@@ -20,7 +20,7 @@ public interface ISIPCommander {
      * @param upDown     镜头上移下移 0:停止 1:上移 2:下移
      * @param moveSpeed  镜头移动速度
 	 */
-	boolean ptzdirectCmd(Device device,String channelId,int leftRight, int upDown);
+	boolean ptzdirectCmd(DeviceRemoteDefinition device,String channelId,int leftRight, int upDown);
 	
 	/**
 	 * 云台方向放控制
@@ -31,7 +31,7 @@ public interface ISIPCommander {
      * @param upDown     镜头上移下移 0:停止 1:上移 2:下移
      * @param moveSpeed  镜头移动速度
 	 */
-	boolean ptzdirectCmd(Device device,String channelId,int leftRight, int upDown, int moveSpeed);
+	boolean ptzdirectCmd(DeviceRemoteDefinition device,String channelId,int leftRight, int upDown, int moveSpeed);
 	
 	/**
 	 * 云台缩放控制，使用配置文件中的默认镜头缩放速度
@@ -40,7 +40,7 @@ public interface ISIPCommander {
 	 * @param channelId  预览通道
      * @param inOut      镜头放大缩小 0:停止 1:缩小 2:放大
 	 */
-	boolean ptzZoomCmd(Device device,String channelId,int inOut);
+	boolean ptzZoomCmd(DeviceRemoteDefinition device,String channelId,int inOut);
 	
 	/**
 	 * 云台缩放控制
@@ -50,7 +50,7 @@ public interface ISIPCommander {
      * @param inOut      镜头放大缩小 0:停止 1:缩小 2:放大
      * @param zoomSpeed  镜头缩放速度
 	 */
-	boolean ptzZoomCmd(Device device,String channelId,int inOut, int moveSpeed);
+	boolean ptzZoomCmd(DeviceRemoteDefinition device,String channelId,int inOut, int moveSpeed);
 	
 	/**
 	 * 云台控制，支持方向与缩放控制
@@ -63,7 +63,7 @@ public interface ISIPCommander {
      * @param moveSpeed  镜头移动速度
      * @param zoomSpeed  镜头缩放速度
 	 */
-	boolean ptzCmd(Device device,String channelId,int leftRight, int upDown, int inOut, int moveSpeed, int zoomSpeed);
+	boolean ptzCmd(DeviceRemoteDefinition device,String channelId,int leftRight, int upDown, int inOut, int moveSpeed, int zoomSpeed);
 	
 	/**
 	 * 前端控制，包括PTZ指令、FI指令、预置位指令、巡航指令、扫描指令和辅助开关指令
@@ -75,7 +75,7 @@ public interface ISIPCommander {
      * @param parameter2	数据2
      * @param combineCode2	组合码2
 	 */
-	boolean frontEndCmd(Device device, String channelId, int cmdCode, int parameter1, int parameter2, int combineCode2);
+	boolean frontEndCmd(DeviceRemoteDefinition device, String channelId, int cmdCode, int parameter1, int parameter2, int combineCode2);
 	
 	/**
 	 * 请求预览视频流
@@ -83,7 +83,7 @@ public interface ISIPCommander {
 	 * @param device  视频设备
 	 * @param channelId  预览通道
 	 */
-	void playStreamCmd(Device device, String channelId, ZLMHttpHookSubscribe.Event event, SipSubscribe.Event errorEvent);
+	void playStreamCmd(DeviceRemoteDefinition device, String channelId, ZLMHttpHookSubscribe.Event event, SipSubscribe.Event errorEvent);
 	
 	/**
 	 * 请求回放视频流
@@ -93,7 +93,7 @@ public interface ISIPCommander {
 	 * @param startTime 开始时间,格式要求：yyyy-MM-dd HH:mm:ss
 	 * @param endTime 结束时间,格式要求：yyyy-MM-dd HH:mm:ss
 	 */
-	void playbackStreamCmd(Device device, String channelId, String startTime, String endTime, ZLMHttpHookSubscribe.Event event, SipSubscribe.Event errorEvent);
+	void playbackStreamCmd(DeviceRemoteDefinition device, String channelId, String startTime, String endTime, ZLMHttpHookSubscribe.Event event, SipSubscribe.Event errorEvent);
 	
 	/**
 	 * 视频流停止
@@ -110,7 +110,7 @@ public interface ISIPCommander {
 	 * @param device  视频设备
 	 * @param channelId  预览通道
 	 */
-	boolean audioBroadcastCmd(Device device,String channelId);
+	boolean audioBroadcastCmd(DeviceRemoteDefinition device,String channelId);
 	
 	/**
 	 * 音视频录像控制
@@ -119,14 +119,14 @@ public interface ISIPCommander {
 	 * @param channelId  	预览通道
 	 * @param recordCmdStr	录像命令：Record / StopRecord
 	 */
-	boolean recordCmd(Device device, String channelId, String recordCmdStr, SipSubscribe.Event errorEvent);
+	boolean recordCmd(DeviceRemoteDefinition device, String channelId, String recordCmdStr, SipSubscribe.Event errorEvent);
 	
 	/**
 	 * 远程启动控制命令
 	 * 
 	 * @param device	视频设备
 	 */
-	boolean teleBootCmd(Device device);
+	boolean teleBootCmd(DeviceRemoteDefinition device);
 
 	/**
 	 * 报警布防/撤防命令
@@ -134,7 +134,7 @@ public interface ISIPCommander {
 	 * @param device  	视频设备
 	 * @param setGuard	true: SetGuard, false: ResetGuard
 	 */
-	boolean guardCmd(Device device, String guardCmdStr, SipSubscribe.Event errorEvent);
+	boolean guardCmd(DeviceRemoteDefinition device, String guardCmdStr, SipSubscribe.Event errorEvent);
 	
 	/**
 	 * 报警复位命令
@@ -143,7 +143,7 @@ public interface ISIPCommander {
 	 * @param alarmMethod	报警方式（可选）
 	 * @param alarmType		报警类型（可选）
 	 */
-	boolean alarmCmd(Device device, String alarmMethod, String alarmType, SipSubscribe.Event errorEvent);
+	boolean alarmCmd(DeviceRemoteDefinition device, String alarmMethod, String alarmType, SipSubscribe.Event errorEvent);
 	
 	/**
 	 * 强制关键帧命令,设备收到此命令应立刻发送一个IDR帧
@@ -151,12 +151,12 @@ public interface ISIPCommander {
 	 * @param device  视频设备
 	 * @param channelId  预览通道
 	 */
-	boolean iFrameCmd(Device device, String channelId);
+	boolean iFrameCmd(DeviceRemoteDefinition device, String channelId);
 	/**
 	 * 截图
 	 * @param ssrc
 	 */
-	boolean screenshotByeCmd(Device device, String channelId, String uploadUrl);
+	boolean screenshotByeCmd(DeviceRemoteDefinition device, String channelId, String uploadUrl);
 	/**
 	 * 看守位控制命令
 	 * 
@@ -165,14 +165,14 @@ public interface ISIPCommander {
 	 * @param resetTime		自动归位时间间隔，开启看守位时使用，单位:秒(s)
 	 * @param presetIndex	调用预置位编号，开启看守位时使用，取值范围0~255
 	 */
-	boolean homePositionCmd(Device device, String channelId, String enabled, String resetTime, String presetIndex, SipSubscribe.Event errorEvent);
+	boolean homePositionCmd(DeviceRemoteDefinition device, String channelId, String enabled, String resetTime, String presetIndex, SipSubscribe.Event errorEvent);
 	
 	/**
 	 * 设备配置命令
 	 * 
 	 * @param device  视频设备
 	 */
-	boolean deviceConfigCmd(Device device);
+	boolean deviceConfigCmd(DeviceRemoteDefinition device);
 	
 		/**
 	 * 设备配置命令：basicParam
@@ -184,14 +184,14 @@ public interface ISIPCommander {
 	 * @param heartBeatInterval	心跳间隔时间（可选）
 	 * @param heartBeatCount	心跳超时次数（可选）
 	 */  
-	boolean deviceBasicConfigCmd(Device device, String channelId, String name, String expiration, String heartBeatInterval, String heartBeatCount, SipSubscribe.Event errorEvent);
+	boolean deviceBasicConfigCmd(DeviceRemoteDefinition device, String channelId, String name, String expiration, String heartBeatInterval, String heartBeatCount, SipSubscribe.Event errorEvent);
 	
 	/**
 	 * 查询设备状态
 	 * 
 	 * @param device 视频设备
 	 */
-	boolean deviceStatusQuery(Device device, SipSubscribe.Event errorEvent);
+	boolean deviceStatusQuery(DeviceRemoteDefinition device, SipSubscribe.Event errorEvent);
 	
 	/**
 	 * 查询设备信息
@@ -199,14 +199,14 @@ public interface ISIPCommander {
 	 * @param device 视频设备
 	 * @return 
 	 */
-	boolean deviceInfoQuery(Device device);
+	boolean deviceInfoQuery(DeviceRemoteDefinition device);
 	
 	/**
 	 * 查询目录列表
 	 * 
 	 * @param device 视频设备
 	 */
-	boolean catalogQuery(Device device, SipSubscribe.Event errorEvent);
+	boolean catalogQuery(DeviceRemoteDefinition device, SipSubscribe.Event errorEvent);
 	
 	/**
 	 * 查询录像信息
@@ -215,7 +215,7 @@ public interface ISIPCommander {
 	 * @param startTime 开始时间,格式要求：yyyy-MM-dd HH:mm:ss
 	 * @param endTime 结束时间,格式要求：yyyy-MM-dd HH:mm:ss
 	 */
-	boolean recordInfoQuery(Device device, String channelId, String startTime, String endTime);
+	boolean recordInfoQuery(DeviceRemoteDefinition device, String channelId, String startTime, String endTime);
 	
 	/**
 	 * 查询报警信息
@@ -229,7 +229,7 @@ public interface ISIPCommander {
 	 * @param endTime		报警发生终止时间（可选）
 	 * @return				true = 命令发送成功
 	 */
-	boolean alarmInfoQuery(Device device, String startPriority, String endPriority, String alarmMethod,
+	boolean alarmInfoQuery(DeviceRemoteDefinition device, String startPriority, String endPriority, String alarmMethod,
 							String alarmType, String startTime, String endTime, SipSubscribe.Event errorEvent);	
 	
 	/**
@@ -239,21 +239,21 @@ public interface ISIPCommander {
 	 * @param channelId		通道编码（可选）
 	 * @param configType	配置类型：
 	 */
-	boolean deviceConfigQuery(Device device, String channelId, String configType,  SipSubscribe.Event errorEvent);
+	boolean deviceConfigQuery(DeviceRemoteDefinition device, String channelId, String configType,  SipSubscribe.Event errorEvent);
 	
 	/**
 	 * 查询设备预置位置
 	 * 
 	 * @param device 视频设备
 	 */
-	boolean presetQuery(Device device, String channelId, SipSubscribe.Event errorEvent);
+	boolean presetQuery(DeviceRemoteDefinition device, String channelId, SipSubscribe.Event errorEvent);
 	
 	/**
 	 * 查询移动设备位置数据
 	 * 
 	 * @param device 视频设备
 	 */
-	boolean mobilePostitionQuery(Device device, SipSubscribe.Event errorEvent);
+	boolean mobilePostitionQuery(DeviceRemoteDefinition device, SipSubscribe.Event errorEvent);
 
 	/**
 	 * 订阅、取消订阅移动位置
@@ -263,7 +263,7 @@ public interface ISIPCommander {
 	 * @param interval	上报时间间隔
 	 * @return			true = 命令发送成功
 	 */
-	boolean mobilePositionSubscribe(Device device, int expires, int interval);
+	boolean mobilePositionSubscribe(DeviceRemoteDefinition device, int expires, int interval);
 
 	/**
 	 * 订阅、取消订阅报警信息
@@ -277,7 +277,7 @@ public interface ISIPCommander {
 	 * @param endTime		报警发生终止时间（可选）
 	 * @return				true = 命令发送成功
 	 */
-	boolean alarmSubscribe(Device device, int expires, String startPriority, String endPriority, String alarmMethod, String alarmType, String startTime, String endTime);
+	boolean alarmSubscribe(DeviceRemoteDefinition device, int expires, String startPriority, String endPriority, String alarmMethod, String alarmType, String startTime, String endTime);
 
 
 	/**
@@ -285,5 +285,5 @@ public interface ISIPCommander {
 	 * @param device
 	 * @param channelId
 	 */
-    void closeRTPServer(Device device, String channelId);
+    void closeRTPServer(DeviceRemoteDefinition device, String channelId);
 }

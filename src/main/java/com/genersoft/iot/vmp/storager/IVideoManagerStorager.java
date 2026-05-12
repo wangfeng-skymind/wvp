@@ -2,8 +2,8 @@ package com.genersoft.iot.vmp.storager;
 
 import java.util.List;
 
-import com.genersoft.iot.vmp.gb28181.bean.Device;
-import com.genersoft.iot.vmp.gb28181.bean.DeviceChannel;
+import com.genersoft.iot.vmp.gb28181.bean.DeviceRemoteDefinition;
+import com.genersoft.iot.vmp.gb28181.bean.DeviceChannelDefinition;
 import com.genersoft.iot.vmp.gb28181.bean.MobilePosition;
 import com.github.pagehelper.PageInfo;
 
@@ -29,7 +29,7 @@ public interface IVideoManagerStorager {
 	 * @param device 设备对象
 	 * @return true：创建成功  false：创建失败
 	 */
-	public boolean create(Device device);
+	public boolean create(DeviceRemoteDefinition device);
 	
 	/**   
 	 * 视频设备更新
@@ -37,7 +37,7 @@ public interface IVideoManagerStorager {
 	 * @param device 设备对象
 	 * @return true：创建成功  false：创建失败
 	 */
-	public boolean updateDevice(Device device);
+	public boolean updateDevice(DeviceRemoteDefinition device);
 
 	/**
 	 * 添加设备通道
@@ -45,7 +45,7 @@ public interface IVideoManagerStorager {
 	 * @param deviceId 设备id
 	 * @param channel 通道
 	 */
-	public void updateChannel(String deviceId, DeviceChannel channel);
+	public void updateChannel(String deviceId, DeviceChannelDefinition channel);
 
 	/**
 	 * 开始播放
@@ -68,7 +68,7 @@ public interface IVideoManagerStorager {
 	 * @param deviceId 设备ID
 	 * @return DShadow 设备对象
 	 */
-	public Device queryVideoDevice(String deviceId);
+	public DeviceRemoteDefinition queryVideoDevice(String deviceId);
 
 	/**
 	 * 获取某个设备的通道列表
@@ -86,29 +86,29 @@ public interface IVideoManagerStorager {
 	 * @param deviceId 设备ID
 	 * @return
 	 */
-	public List<DeviceChannel> queryChannelsByDeviceId(String deviceId);
+	public List<DeviceChannelDefinition> queryChannelsByDeviceId(String deviceId);
 
 	/**
 	 * 获取某个设备的通道
 	 * @param deviceId 设备ID
 	 * @param channelId 通道ID
 	 */
-	public DeviceChannel queryChannel(String deviceId, String channelId);
+	public DeviceChannelDefinition queryChannel(String deviceId, String channelId);
 
 	/**
 	 * 获取多个设备
 	 * @param page 当前页数
 	 * @param count 每页数量
-	 * @return List<Device> 设备对象数组
+	 * @return List<DeviceRemoteDefinition> 设备对象数组
 	 */
-	public PageInfo<Device> queryVideoDeviceList(int page, int count);
+	public PageInfo<DeviceRemoteDefinition> queryVideoDeviceList(int page, int count);
 
 	/**
 	 * 获取多个设备
 	 *
-	 * @return List<Device> 设备对象数组
+	 * @return List<DeviceRemoteDefinition> 设备对象数组
 	 */
-	public List<Device> queryVideoDeviceList();
+	public List<DeviceRemoteDefinition> queryVideoDeviceList();
 
 	/**   
 	 * 删除设备

@@ -3,8 +3,8 @@ package com.genersoft.iot.vmp.web;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.genersoft.iot.vmp.common.StreamInfo;
-import com.genersoft.iot.vmp.gb28181.bean.Device;
-import com.genersoft.iot.vmp.gb28181.bean.DeviceChannel;
+import com.genersoft.iot.vmp.gb28181.bean.DeviceRemoteDefinition;
+import com.genersoft.iot.vmp.gb28181.bean.DeviceChannelDefinition;
 import com.genersoft.iot.vmp.gb28181.transmit.cmd.impl.SIPCommander;
 // import com.genersoft.iot.vmp.media.zlm.ZLMRESTfulUtils;
 import com.genersoft.iot.vmp.storager.IRedisCatchStorage;
@@ -71,7 +71,7 @@ public class ApiStreamController {
 
     ){
         DeferredResult<JSONObject> resultDeferredResult = new DeferredResult<JSONObject>();
-        Device device = storager.queryVideoDevice(serial);
+        DeviceRemoteDefinition device = storager.queryVideoDevice(serial);
         if (device == null ) {
             JSONObject result = new JSONObject();
             result.put("error","device[ " + serial + " ]未找到");
@@ -90,7 +90,7 @@ public class ApiStreamController {
              // 清理RTP server
         });
 
-        DeviceChannel deviceChannel = storager.queryChannel(serial, code);
+        DeviceChannelDefinition deviceChannel = storager.queryChannel(serial, code);
         if (deviceChannel == null) {
             JSONObject result = new JSONObject();
             result.put("error","channel[ " + code + " ]未找到");

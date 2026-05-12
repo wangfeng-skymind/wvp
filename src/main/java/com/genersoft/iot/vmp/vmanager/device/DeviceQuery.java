@@ -1,6 +1,6 @@
 package com.genersoft.iot.vmp.vmanager.device;
 
-import com.genersoft.iot.vmp.gb28181.bean.DeviceChannel;
+import com.genersoft.iot.vmp.gb28181.bean.DeviceChannelDefinition;
 import com.genersoft.iot.vmp.gb28181.transmit.callback.RequestMessage;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 
 import com.alibaba.fastjson.JSONObject;
-import com.genersoft.iot.vmp.gb28181.bean.Device;
+import com.genersoft.iot.vmp.gb28181.bean.DeviceRemoteDefinition;
 import com.genersoft.iot.vmp.gb28181.event.DeviceOffLineDetector;
 import com.genersoft.iot.vmp.gb28181.transmit.callback.DeferredResultHolder;
 import com.genersoft.iot.vmp.gb28181.transmit.cmd.impl.SIPCommander;
@@ -44,24 +44,24 @@ public class DeviceQuery {
 	private DeviceOffLineDetector offLineDetector;
 	
 	@GetMapping("/devices/{deviceId}")
-	public ResponseEntity<Device> devices(@PathVariable String deviceId){
+	public ResponseEntity<DeviceRemoteDefinition> devices(@PathVariable String deviceId){
 		
 		if (logger.isDebugEnabled()) {
 			logger.debug("查询视频设备API调用，deviceId：" + deviceId);
 		}
 		
-		Device device = storager.queryVideoDevice(deviceId);
+		DeviceRemoteDefinition device = storager.queryVideoDevice(deviceId);
 		return new ResponseEntity<>(device,HttpStatus.OK);
 	}
 	
 	@GetMapping("/devices")
-	public PageInfo<Device> devices(int page, int count){
+	public PageInfo<DeviceRemoteDefinition> devices(int page, int count){
 		log.info("调用接口查询设备>>>>>>>>>>>>>>>>>>>>>>查询设备===");
 		if (logger.isDebugEnabled()) {
 			logger.debug("查询所有视频设备API调用");
 		}
 
-		PageInfo<Device> re = storager.queryVideoDeviceList(page, count);
+		PageInfo<DeviceRemoteDefinition> re = storager.queryVideoDeviceList(page, count);
 		re.getList().forEach(device -> {
 			logger.info("====查询的device===" + device);
 		});
@@ -97,13 +97,13 @@ public class DeviceQuery {
 	}
 	
 	@PostMapping("/devices/{deviceId}/sync")
-	public DeferredResult<ResponseEntity<Device>> devicesSync(@PathVariable String deviceId){
+	public DeferredResult<ResponseEntity<DeviceRemoteDefinition>> devicesSync(@PathVariable String deviceId){
 		
 		if (logger.isDebugEnabled()) {
 		}
 			logger.debug("设备通道信息同步API调用，deviceId：" + deviceId);
 
-		Device device = storager.queryVideoDevice(deviceId);
+		DeviceRemoteDefinition device = storager.queryVideoDevice(deviceId);
         cmder.catalogQuery(device, event -> {
 			Response response = event.getResponse();
 			RequestMessage msg = new RequestMessage();
@@ -111,7 +111,7 @@ public class DeviceQuery {
 			msg.setData(String.format("同步通道失败，错误码： %s, %s", response.getStatusCode(), response.getReasonPhrase()));
 			resultHolder.invokeResult(msg);
 		});
-        DeferredResult<ResponseEntity<Device>> result = new DeferredResult<ResponseEntity<Device>>(2*1000L);
+        DeferredResult<ResponseEntity<DeviceRemoteDefinition>> result = new DeferredResult<ResponseEntity<DeviceRemoteDefinition>>(2*1000L);
 		result.onTimeout(()->{
 			logger.warn(String.format("设备通道信息同步超时"));
 			// 释放rtpserver
@@ -164,9 +164,9 @@ public class DeviceQuery {
 		if (logger.isDebugEnabled()) {
 			logger.debug("查询所有视频通道API调用");
 		}
-		DeviceChannel deviceChannel = storager.queryChannel(deviceId,channelId);
+		DeviceChannelDefinition deviceChannel = storager.queryChannel(deviceId,channelId);
 		if (deviceChannel == null) {
-			PageInfo<DeviceChannel> deviceChannelPageResult = new PageInfo<>();
+			PageInfo<DeviceChannelDefinition> deviceChannelPageResult = new PageInfo<>();
 			return new ResponseEntity<>(deviceChannelPageResult,HttpStatus.OK);
 		}
 
@@ -175,7 +175,7 @@ public class DeviceQuery {
 	}
 
 	@PostMapping("/channel/update/{deviceId}")
-	public ResponseEntity<PageInfo> updateChannel(@PathVariable String deviceId,DeviceChannel channel){
+	public ResponseEntity<PageInfo> updateChannel(@PathVariable String deviceId,DeviceChannelDefinition channel){
 		storager.updateChannel(deviceId, channel);
 		return new ResponseEntity<>(null,HttpStatus.OK);
 	}
@@ -183,7 +183,7 @@ public class DeviceQuery {
 	@GetMapping("/devices/{deviceId}/transport/{streamMode}")
 	@PostMapping("/devices/{deviceId}/transport/{streamMode}")
 	public ResponseEntity<PageInfo> updateTransport(@PathVariable String deviceId, @PathVariable String streamMode){
-		Device device = storager.queryVideoDevice(deviceId);
+		DeviceRemoteDefinition device = storager.queryVideoDevice(deviceId);
 		device.setStreamMode(streamMode);
 		storager.updateDevice(device);
 		return new ResponseEntity<>(null,HttpStatus.OK);
@@ -199,7 +199,7 @@ public class DeviceQuery {
 		if (logger.isDebugEnabled()) {
 			logger.debug("设备状态查询API调用");
 		}
-		Device device = storager.queryVideoDevice(deviceId);
+		DeviceRemoteDefinition device = storager.queryVideoDevice(deviceId);
 		cmder.deviceStatusQuery(device, event -> {
 			Response response = event.getResponse();
 			RequestMessage msg = new RequestMessage();
@@ -213,7 +213,7 @@ public class DeviceQuery {
 			// 释放rtpserver
 			RequestMessage msg = new RequestMessage();
 			msg.setId(DeferredResultHolder.CALLBACK_CMD_DEVICESTATUS + deviceId);
-			msg.setData("Timeout. Device did not response to this command.");
+			msg.setData("Timeout. DeviceRemoteDefinition did not response to this command.");
 			resultHolder.invokeResult(msg);
 		});
 		resultHolder.put(DeferredResultHolder.CALLBACK_CMD_DEVICESTATUS + deviceId, result);
@@ -236,7 +236,7 @@ public class DeviceQuery {
 		if (logger.isDebugEnabled()) {
 			logger.debug("设备报警查询API调用");
 		}
-		Device device = storager.queryVideoDevice(deviceId);
+		DeviceRemoteDefinition device = storager.queryVideoDevice(deviceId);
 		cmder.alarmInfoQuery(device, startPriority, endPriority, alarmMethod, alarmType, startTime, endTime, event -> {
 			Response response = event.getResponse();
 			RequestMessage msg = new RequestMessage();

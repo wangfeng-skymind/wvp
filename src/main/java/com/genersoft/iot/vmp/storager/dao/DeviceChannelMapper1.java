@@ -1,6 +1,6 @@
 package com.genersoft.iot.vmp.storager.dao;
 
-import com.genersoft.iot.vmp.gb28181.bean.DeviceChannel;
+import com.genersoft.iot.vmp.gb28181.bean.DeviceChannelDefinition;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -17,7 +17,7 @@ public interface DeviceChannelMapper1 {
             "VALUES ('${channelId}', '${deviceId}', '${name}', '${manufacture}', '${model}', '${owner}', '${civilCode}', '${block}'," +
             "'${address}', ${parental}, '${parentId}', ${safetyWay}, ${registerWay}, '${certNum}', ${certifiable}, ${errCode}, '${secrecy}', " +
             "'${ipAddress}', ${port}, '${password}', ${PTZType}, ${status})")
-    int add(DeviceChannel channel);
+    int add(DeviceChannelDefinition channel);
 
     @Update(value = {" <script>" +
             "UPDATE device_channel " +
@@ -46,7 +46,7 @@ public interface DeviceChannelMapper1 {
             "<if test=\"hasAudio != null\">, hasAudio='${hasAudio}'</if>" +
             "WHERE deviceId='${deviceId}' AND channelId='${channelId}'"+
             " </script>"})
-    int update(DeviceChannel channel);
+    int update(DeviceChannelDefinition channel);
 
     @Select(value = {" <script>" +
             "SELECT * FROM ( "+
@@ -61,10 +61,10 @@ public interface DeviceChannelMapper1 {
             " <if test=\"hasSubChannel == false\" >  AND subCount=0</if>" +
             " ORDER BY channelId ASC" +
             " </script>"})
-    List<DeviceChannel> queryChannelsByDeviceId(String deviceId, String parentChannelId, String query, Boolean hasSubChannel, Boolean online);
+    List<DeviceChannelDefinition> queryChannelsByDeviceId(String deviceId, String parentChannelId, String query, Boolean hasSubChannel, Boolean online);
 
     @Select("SELECT * FROM device_channel WHERE deviceId=#{deviceId} AND channelId=#{channelId}")
-    DeviceChannel queryChannel(String deviceId, String channelId);
+    DeviceChannelDefinition queryChannel(String deviceId, String channelId);
 
     @Delete("DELETE FROM device_channel WHERE deviceId=#{deviceId}")
     int cleanChannelsByDeviceId(String deviceId);

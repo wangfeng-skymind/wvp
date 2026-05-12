@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.sip.message.Response;
 
-import com.genersoft.iot.vmp.gb28181.bean.Device;
+import com.genersoft.iot.vmp.gb28181.bean.DeviceRemoteDefinition;
 import com.genersoft.iot.vmp.gb28181.bean.MobilePosition;
 import com.genersoft.iot.vmp.gb28181.transmit.callback.DeferredResultHolder;
 import com.genersoft.iot.vmp.gb28181.transmit.callback.RequestMessage;
@@ -71,7 +71,7 @@ public class MobilePositionController {
 
     @GetMapping("/positions/{deviceId}/realtime")
     public DeferredResult<ResponseEntity<MobilePosition>> realTimePosition(@PathVariable String deviceId) {
-        Device device = storager.queryVideoDevice(deviceId);
+        DeviceRemoteDefinition device = storager.queryVideoDevice(deviceId);
         cmder.mobilePostitionQuery(device, event -> {
 			Response response = event.getResponse();
 			RequestMessage msg = new RequestMessage();
@@ -104,7 +104,7 @@ public class MobilePositionController {
         if (StringUtil.isEmpty(interval)) {
             interval = "5";
         }
-        Device device = storager.queryVideoDevice(deviceId);
+        DeviceRemoteDefinition device = storager.queryVideoDevice(deviceId);
 
         String result = msg;
         if (cmder.mobilePositionSubscribe(device, Integer.parseInt(expires), Integer.parseInt(interval))) {

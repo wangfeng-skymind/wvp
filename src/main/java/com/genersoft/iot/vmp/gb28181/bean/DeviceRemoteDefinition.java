@@ -7,7 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.apache.ibatis.annotations.Select;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -17,10 +18,10 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "device_remote")
+@Table(name = "device_remote_definition")
 @ApiModel(description = "设备远程表")
 @Data
-public class Device {
+public class DeviceRemoteDefinition {
 
 /*
 
@@ -98,16 +99,19 @@ public class Device {
 	 * 注册时间
 	 */
 	private Long registerTimeMillis;
+	@CreationTimestamp
+	@Column(name="create_time")
+	private LocalDateTime createTime; // 创建时间
+	@UpdateTimestamp
 	private LocalDateTime update_time;
-
 	/**
 	 * 通道个数
 	 */
 	private int channelCount;
-	@OneToMany(fetch = FetchType.LAZY) // 或 FetchType.EAGER 自动加载
+	@OneToMany(fetch = FetchType.EAGER) // 或 FetchType.EAGER 自动加载
 	@JoinColumn(name = "deviceId", insertable = false, updatable = false)
 	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-	private List<DeviceChannel> channels;
+	private List<DeviceChannelDefinition> channels;
 
 
 

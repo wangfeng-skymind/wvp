@@ -3,7 +3,7 @@ package com.genersoft.iot.vmp.vmanager.screenshot;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.genersoft.iot.vmp.common.StreamInfo;
-import com.genersoft.iot.vmp.gb28181.bean.Device;
+import com.genersoft.iot.vmp.gb28181.bean.DeviceRemoteDefinition;
 import com.genersoft.iot.vmp.gb28181.transmit.callback.DeferredResultHolder;
 import com.genersoft.iot.vmp.gb28181.transmit.callback.RequestMessage;
 import com.genersoft.iot.vmp.gb28181.transmit.cmd.impl.SIPCommander;
@@ -55,7 +55,7 @@ public class SnapshotController {
                                                        @PathVariable String channelId) {
 
 
-        Device device = storager.queryVideoDevice(deviceId);
+        DeviceRemoteDefinition device = storager.queryVideoDevice(deviceId);
         StreamInfo streamInfo = redisCatchStorage.queryPlayByDevice(deviceId, channelId);
 
         UUID uuid = UUID.randomUUID();

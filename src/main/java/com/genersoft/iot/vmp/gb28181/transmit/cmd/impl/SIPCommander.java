@@ -29,7 +29,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import com.genersoft.iot.vmp.conf.SipConfig;
-import com.genersoft.iot.vmp.gb28181.bean.Device;
+import com.genersoft.iot.vmp.gb28181.bean.DeviceRemoteDefinition;
 import com.genersoft.iot.vmp.gb28181.session.VideoStreamSessionManager;
 import com.genersoft.iot.vmp.gb28181.transmit.cmd.ISIPCommander;
 import com.genersoft.iot.vmp.gb28181.transmit.cmd.SIPRequestHeaderProvider;
@@ -100,7 +100,7 @@ public class SIPCommander implements ISIPCommander {
      * @param upDown     镜头上移下移 0:停止 1:上移 2:下移
 	 */
 	@Override
-	public boolean ptzdirectCmd(Device device, String channelId, int leftRight, int upDown) {
+	public boolean ptzdirectCmd(DeviceRemoteDefinition device, String channelId, int leftRight, int upDown) {
 		return ptzCmd(device, channelId, leftRight, upDown, 0, sipConfig.getSpeed(), 0);
 	}
 
@@ -114,7 +114,7 @@ public class SIPCommander implements ISIPCommander {
      * @param moveSpeed  镜头移动速度
 	 */
 	@Override
-	public boolean ptzdirectCmd(Device device, String channelId, int leftRight, int upDown, int moveSpeed) {
+	public boolean ptzdirectCmd(DeviceRemoteDefinition device, String channelId, int leftRight, int upDown, int moveSpeed) {
 		return ptzCmd(device, channelId, leftRight, upDown, 0, moveSpeed, 0);
 	}
 
@@ -126,7 +126,7 @@ public class SIPCommander implements ISIPCommander {
      * @param inOut      镜头放大缩小 0:停止 1:缩小 2:放大
 	 */  
 	@Override
-	public boolean ptzZoomCmd(Device device, String channelId, int inOut) {
+	public boolean ptzZoomCmd(DeviceRemoteDefinition device, String channelId, int inOut) {
 		return ptzCmd(device, channelId, 0, 0, inOut, 0, sipConfig.getSpeed());
 	}
 
@@ -139,7 +139,7 @@ public class SIPCommander implements ISIPCommander {
      * @param zoomSpeed  镜头缩放速度
 	 */ 
 	@Override
-	public boolean ptzZoomCmd(Device device, String channelId, int inOut, int zoomSpeed) {
+	public boolean ptzZoomCmd(DeviceRemoteDefinition device, String channelId, int inOut, int zoomSpeed) {
 		return ptzCmd(device, channelId, 0, 0, inOut, 0, zoomSpeed);
 	}
   
@@ -223,7 +223,7 @@ public class SIPCommander implements ISIPCommander {
      * @param zoomSpeed	镜头缩放速度
 	 */
 	@Override
-	public boolean ptzCmd(Device device, String channelId, int leftRight, int upDown, int inOut, int moveSpeed,
+	public boolean ptzCmd(DeviceRemoteDefinition device, String channelId, int leftRight, int upDown, int inOut, int moveSpeed,
 			int zoomSpeed) {
 		try {
 			String cmdStr= cmdString(leftRight, upDown, inOut, moveSpeed, zoomSpeed);
@@ -260,7 +260,7 @@ public class SIPCommander implements ISIPCommander {
      * @param combineCode2	组合码2
 	 */
 	@Override
-	public boolean frontEndCmd(Device device, String channelId, int cmdCode, int parameter1, int parameter2, int combineCode2) {
+	public boolean frontEndCmd(DeviceRemoteDefinition device, String channelId, int cmdCode, int parameter1, int parameter2, int combineCode2) {
 		try {
 			String cmdStr= frontEndCmdString(cmdCode, parameter1, parameter2, combineCode2);
 			System.out.println("控制字符串：" + cmdStr);
@@ -293,7 +293,7 @@ public class SIPCommander implements ISIPCommander {
 	 * @param errorEvent sip错误订阅
 	 */
 	@Override
-	public void playStreamCmd(Device device, String channelId, ZLMHttpHookSubscribe.Event event, SipSubscribe.Event errorEvent) {
+	public void playStreamCmd(DeviceRemoteDefinition device, String channelId, ZLMHttpHookSubscribe.Event event, SipSubscribe.Event errorEvent) {
 		try {
 
 			String ssrc = streamSession.createPlaySsrc();
@@ -428,7 +428,7 @@ public class SIPCommander implements ISIPCommander {
 	 * @param endTime 结束时间,格式要求：yyyy-MM-dd HH:mm:ss
 	 */ 
 	@Override
-	public void playbackStreamCmd(Device device, String channelId, String startTime, String endTime, ZLMHttpHookSubscribe.Event event
+	public void playbackStreamCmd(DeviceRemoteDefinition device, String channelId, String startTime, String endTime, ZLMHttpHookSubscribe.Event event
 			, SipSubscribe.Event errorEvent) {
 		try {
 			MediaServerConfig mediaInfo = redisCatchStorage.getMediaInfo();
@@ -591,7 +591,7 @@ public class SIPCommander implements ISIPCommander {
 	 * @param channelId  预览通道
 	 */
 	@Override
-	public boolean audioBroadcastCmd(Device device, String channelId) {
+	public boolean audioBroadcastCmd(DeviceRemoteDefinition device, String channelId) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -604,7 +604,7 @@ public class SIPCommander implements ISIPCommander {
 	 * @param recordCmdStr	录像命令：Record / StopRecord
 	 */  
 	@Override
-	public boolean recordCmd(Device device, String channelId, String recordCmdStr, SipSubscribe.Event errorEvent) {
+	public boolean recordCmd(DeviceRemoteDefinition device, String channelId, String recordCmdStr, SipSubscribe.Event errorEvent) {
 		try {
 			StringBuffer cmdXml = new StringBuffer(200);
 			cmdXml.append("<?xml version=\"1.0\" ?>\r\n");
@@ -635,7 +635,7 @@ public class SIPCommander implements ISIPCommander {
 	 * @param device	视频设备
 	 */
 	@Override
-	public boolean teleBootCmd(Device device) {
+	public boolean teleBootCmd(DeviceRemoteDefinition device) {
 		try {
 			StringBuffer cmdXml = new StringBuffer(200);
 			cmdXml.append("<?xml version=\"1.0\" ?>\r\n");
@@ -663,7 +663,7 @@ public class SIPCommander implements ISIPCommander {
 	 * @param guardCmdStr	"SetGuard"/"ResetGuard"
 	 */
 	@Override
-	public boolean guardCmd(Device device, String guardCmdStr, SipSubscribe.Event errorEvent) {
+	public boolean guardCmd(DeviceRemoteDefinition device, String guardCmdStr, SipSubscribe.Event errorEvent) {
 		try {
 			StringBuffer cmdXml = new StringBuffer(200);
 			cmdXml.append("<?xml version=\"1.0\" ?>\r\n");
@@ -690,7 +690,7 @@ public class SIPCommander implements ISIPCommander {
 	 * @param device  视频设备
 	 */  
 	@Override
-	public boolean alarmCmd(Device device, String alarmMethod, String alarmType, SipSubscribe.Event errorEvent) {
+	public boolean alarmCmd(DeviceRemoteDefinition device, String alarmMethod, String alarmType, SipSubscribe.Event errorEvent) {
 		try {
 			StringBuffer cmdXml = new StringBuffer(200);
 			cmdXml.append("<?xml version=\"1.0\" ?>\r\n");
@@ -730,7 +730,7 @@ public class SIPCommander implements ISIPCommander {
 	 * @param channelId  预览通道
 	 */ 
 	@Override
-	public boolean iFrameCmd(Device device, String channelId) {
+	public boolean iFrameCmd(DeviceRemoteDefinition device, String channelId) {
 		try {
 			StringBuffer cmdXml = new StringBuffer(200);
 			cmdXml.append("<?xml version=\"1.0\" ?>\r\n");
@@ -759,7 +759,7 @@ public class SIPCommander implements ISIPCommander {
 	 *
 	 */
 	@Override
-	public boolean screenshotByeCmd(Device nvrDevice, String channelId, String uploadUrl) {
+	public boolean screenshotByeCmd(DeviceRemoteDefinition nvrDevice, String channelId, String uploadUrl) {
 
 		try {
 			StringBuffer cmdXml = new StringBuffer(512);
@@ -814,7 +814,7 @@ public class SIPCommander implements ISIPCommander {
 	 * @param presetIndex	调用预置位编号，开启看守位时使用，取值范围0~255
 	 */  
 	@Override
-	public boolean homePositionCmd(Device device, String channelId, String enabled, String resetTime, String presetIndex, SipSubscribe.Event errorEvent) {
+	public boolean homePositionCmd(DeviceRemoteDefinition device, String channelId, String enabled, String resetTime, String presetIndex, SipSubscribe.Event errorEvent) {
 		try {
 			StringBuffer cmdXml = new StringBuffer(200);
 			cmdXml.append("<?xml version=\"1.0\" ?>\r\n");
@@ -861,7 +861,7 @@ public class SIPCommander implements ISIPCommander {
 	 * @param device  视频设备
 	 */  
 	@Override
-	public boolean deviceConfigCmd(Device device) {
+	public boolean deviceConfigCmd(DeviceRemoteDefinition device) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -877,7 +877,7 @@ public class SIPCommander implements ISIPCommander {
 	 * @param heartBeatCount	心跳超时次数（可选）
 	 */  
 	@Override
-	public boolean deviceBasicConfigCmd(Device device, String channelId, String name, String expiration, 
+	public boolean deviceBasicConfigCmd(DeviceRemoteDefinition device, String channelId, String name, String expiration, 
 										String heartBeatInterval, String heartBeatCount, SipSubscribe.Event errorEvent) {
 		try {
 			StringBuffer cmdXml = new StringBuffer(200);
@@ -928,7 +928,7 @@ public class SIPCommander implements ISIPCommander {
 	 * @param device 视频设备
 	 */  
 	@Override
-	public boolean deviceStatusQuery(Device device, SipSubscribe.Event errorEvent) {
+	public boolean deviceStatusQuery(DeviceRemoteDefinition device, SipSubscribe.Event errorEvent) {
 		try {
 			StringBuffer catalogXml = new StringBuffer(200);
 			catalogXml.append("<?xml version=\"1.0\" encoding=\"GB2312\"?>\r\n");
@@ -956,7 +956,7 @@ public class SIPCommander implements ISIPCommander {
 	 * @param device 视频设备
 	 */  
 	@Override
-	public boolean deviceInfoQuery(Device device) {
+	public boolean deviceInfoQuery(DeviceRemoteDefinition device) {
 		try {
 			StringBuffer catalogXml = new StringBuffer(200);
 			catalogXml.append("<?xml version=\"1.0\" encoding=\"GB2312\"?>\r\n");
@@ -984,7 +984,7 @@ public class SIPCommander implements ISIPCommander {
 	 * @param device 视频设备
 	 */ 
 	@Override
-	public boolean catalogQuery(Device device, SipSubscribe.Event errorEvent) {
+	public boolean catalogQuery(DeviceRemoteDefinition device, SipSubscribe.Event errorEvent) {
 		// 清空通道
 		storager.cleanChannelsForDevice(device.getDeviceId());
 		try {
@@ -1015,7 +1015,7 @@ public class SIPCommander implements ISIPCommander {
 	 * @param endTime 结束时间,格式要求：yyyy-MM-dd HH:mm:ss
 	 */  
 	@Override
-	public boolean recordInfoQuery(Device device, String channelId, String startTime, String endTime) {
+	public boolean recordInfoQuery(DeviceRemoteDefinition device, String channelId, String startTime, String endTime) {
 		
 		try {
 			StringBuffer recordInfoXml = new StringBuffer(200);
@@ -1055,7 +1055,7 @@ public class SIPCommander implements ISIPCommander {
 	 * @return				true = 命令发送成功
 	 */
 	@Override
-	public boolean alarmInfoQuery(Device device, String startPriority, String endPriority, String alarmMethod, String alarmType,
+	public boolean alarmInfoQuery(DeviceRemoteDefinition device, String startPriority, String endPriority, String alarmMethod, String alarmType,
 								 String startTime, String endTime, SipSubscribe.Event errorEvent) {
 		try {
 			StringBuffer cmdXml = new StringBuffer(200);
@@ -1102,7 +1102,7 @@ public class SIPCommander implements ISIPCommander {
 	 * @param configType	配置类型：
 	 */
 	@Override
-	public boolean deviceConfigQuery(Device device, String channelId, String configType,  SipSubscribe.Event errorEvent) {
+	public boolean deviceConfigQuery(DeviceRemoteDefinition device, String channelId, String configType,  SipSubscribe.Event errorEvent) {
 		try {
 			StringBuffer cmdXml = new StringBuffer(200);
 			cmdXml.append("<?xml version=\"1.0\" ?>\r\n");
@@ -1133,7 +1133,7 @@ public class SIPCommander implements ISIPCommander {
 	 * @param device 视频设备
 	 */  
 	@Override
-	public boolean presetQuery(Device device, String channelId, SipSubscribe.Event errorEvent) {
+	public boolean presetQuery(DeviceRemoteDefinition device, String channelId, SipSubscribe.Event errorEvent) {
 		try {
 			StringBuffer cmdXml = new StringBuffer(200);
 			cmdXml.append("<?xml version=\"1.0\" ?>\r\n");
@@ -1163,7 +1163,7 @@ public class SIPCommander implements ISIPCommander {
 	 * @param device 视频设备
 	 */  
 	@Override
-	public boolean mobilePostitionQuery(Device device, SipSubscribe.Event errorEvent) {
+	public boolean mobilePostitionQuery(DeviceRemoteDefinition device, SipSubscribe.Event errorEvent) {
 		try {
 			StringBuffer mobilePostitionXml = new StringBuffer(200);
 			mobilePostitionXml.append("<?xml version=\"1.0\" encoding=\"GB2312\"?>\r\n");
@@ -1194,7 +1194,7 @@ public class SIPCommander implements ISIPCommander {
 	 * @param interval	上报时间间隔
 	 * @return			true = 命令发送成功
 	 */
-	public boolean mobilePositionSubscribe(Device device, int expires, int interval) {
+	public boolean mobilePositionSubscribe(DeviceRemoteDefinition device, int expires, int interval) {
 		try {
 			StringBuffer subscribePostitionXml = new StringBuffer(200);
 			subscribePostitionXml.append("<?xml version=\"1.0\" encoding=\"GB2312\"?>\r\n");
@@ -1232,7 +1232,7 @@ public class SIPCommander implements ISIPCommander {
 	 * @param endTime		报警发生终止时间（可选）
 	 * @return				true = 命令发送成功
 	 */
-	public boolean alarmSubscribe(Device device, int expires, String startPriority, String endPriority, String alarmMethod, String alarmType, String startTime, String endTime) {
+	public boolean alarmSubscribe(DeviceRemoteDefinition device, int expires, String startPriority, String endPriority, String alarmMethod, String alarmType, String startTime, String endTime) {
 		try {
 			StringBuffer cmdXml = new StringBuffer(200);
 			cmdXml.append("<?xml version=\"1.0\" encoding=\"GB2312\"?>\r\n");
@@ -1273,15 +1273,15 @@ public class SIPCommander implements ISIPCommander {
 	}
 
 
-	private ClientTransaction transmitRequest(Device device, Request request) throws SipException {
+	private ClientTransaction transmitRequest(DeviceRemoteDefinition device, Request request) throws SipException {
 		return transmitRequest(device, request, null, null);
 	}
 
-	private ClientTransaction transmitRequest(Device device, Request request, SipSubscribe.Event errorEvent) throws SipException {
+	private ClientTransaction transmitRequest(DeviceRemoteDefinition device, Request request, SipSubscribe.Event errorEvent) throws SipException {
 		return transmitRequest(device, request, errorEvent, null);
 	}
 
-	private ClientTransaction transmitRequest(Device device, Request request, SipSubscribe.Event errorEvent , SipSubscribe.Event okEvent) throws SipException {
+	private ClientTransaction transmitRequest(DeviceRemoteDefinition device, Request request, SipSubscribe.Event errorEvent , SipSubscribe.Event okEvent) throws SipException {
 		ClientTransaction clientTransaction = null;
 		if("TCP".equals(device.getTransport())) {
 			clientTransaction = tcpSipProvider.getNewClientTransaction(request);
@@ -1307,7 +1307,7 @@ public class SIPCommander implements ISIPCommander {
 
 
 	@Override
-	public void closeRTPServer(Device device, String channelId) {
+	public void closeRTPServer(DeviceRemoteDefinition device, String channelId) {
 
 		System.out.println("closeRTPServer>>>>>ff>>=====" + device.getDeviceId() + "------" + channelId);
 		if (rtpEnable) {

@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
-import com.genersoft.iot.vmp.gb28181.bean.Device;
+import com.genersoft.iot.vmp.gb28181.bean.DeviceRemoteDefinition;
 import com.genersoft.iot.vmp.gb28181.transmit.cmd.impl.SIPCommander;
 import com.genersoft.iot.vmp.storager.IVideoManagerStorager;
 import org.springframework.web.context.request.async.DeferredResult;
@@ -68,7 +68,7 @@ public class PlaybackController {
 			msg.setData("Timeout");
 			resultHolder.invokeResult(msg);
 		});
-		Device device = storager.queryVideoDevice(deviceId);
+		DeviceRemoteDefinition device = storager.queryVideoDevice(deviceId);
 		StreamInfo streamInfo = redisCatchStorage.queryPlaybackByDevice(deviceId, channelId);
 		if (streamInfo != null) {
 			// 停止之前的回放

@@ -4,20 +4,21 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import com.genersoft.iot.vmp.gb28181.bean.DeviceChannel;
+import com.genersoft.iot.vmp.gb28181.bean.DeviceChannelDefinition;
 import com.genersoft.iot.vmp.gb28181.bean.MobilePosition;
 /*import com.genersoft.iot.vmp.storager.dao.DeviceChannelMapper;
 import com.genersoft.iot.vmp.storager.dao.DeviceMapper;
 import com.genersoft.iot.vmp.storager.dao.DeviceMobilePositionMapper;*/
+import com.genersoft.iot.vmp.gb28181.utils.JpaUtil;
 import com.genersoft.iot.vmp.storager.repository.IDeviceChannelRepository;
- import com.genersoft.iot.vmp.storager.repository.IDeviceRepository;
+import com.genersoft.iot.vmp.storager.repository.IDeviceRemoteRepository;
 import com.genersoft.iot.vmp.storager.repository.IMobilePositionRepository;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.genersoft.iot.vmp.gb28181.bean.Device;
+import com.genersoft.iot.vmp.gb28181.bean.DeviceRemoteDefinition;
 import com.genersoft.iot.vmp.storager.IVideoManagerStorager;
 
 /**    
@@ -37,7 +38,7 @@ public class VideoManagerStoragerImpl implements IVideoManagerStorager {
 	private DeviceMobilePositionMapper deviceMobilePositionMapper;*/
 
 	@Autowired
-	private IDeviceRepository deviceMapper;
+	private IDeviceRemoteRepository deviceMapper;
 	@Autowired
 	private IDeviceChannelRepository deviceChannelMapper;
 
@@ -53,7 +54,7 @@ public class VideoManagerStoragerImpl implements IVideoManagerStorager {
 	 */
 	@Override
 	public boolean exists(String deviceId) {
-		Device re = deviceMapper.getByDeviceId(deviceId).orElse(null);
+		DeviceRemoteDefinition re = deviceMapper.getByDeviceId(deviceId).orElse(null);
 
 		return re != null;
 	}
@@ -65,7 +66,7 @@ public class VideoManagerStoragerImpl implements IVideoManagerStorager {
 	 * @return true：创建成功  false：创建失败
 	 */
 	@Override
-	public synchronized boolean create(Device device) {
+	public synchronized boolean create(DeviceRemoteDefinition device) {
 		device = deviceMapper.save(device);
 
 		return device.getDeviceId() != null? true : false;
@@ -80,31 +81,35 @@ public class VideoManagerStoragerImpl implements IVideoManagerStorager {
 	 * @return true：更新成功  false：更新失败
 	 */
 	@Override
-	public synchronized boolean updateDevice(Device device) {
+	public synchronized boolean updateDevice(DeviceRemoteDefinition device) {
 
-		Device deviceByDeviceId = deviceMapper.findByDeviceId(device.getDeviceId()).orElse(null);
-		if (deviceByDeviceId == null) {
+		DeviceRemoteDefinition deviceByDevice = deviceMapper.findByDeviceId(device.getDeviceId()).orElse(null);
+
+
+		if (deviceByDevice == null) {
 			deviceMapper.save(device);
 			return device.getDeviceId() != null? true : false;
 
 		}else {
-			device.setUpdate_time(LocalDateTime.now());
-			deviceMapper.save(device);
+			JpaUtil.copyNotNullProperties2src(device, deviceByDevice);
+			deviceByDevice.setUpdate_time(LocalDateTime.now());
+			device = deviceMapper.save(deviceByDevice);
 			return device.getDeviceId() != null? true : false;
 
 		}
 	}
 
 	@Override
-	public synchronized void updateChannel(String deviceId, DeviceChannel channel) {
+	public synchronized void updateChannel(String deviceId, DeviceChannelDefinition channel) {
 		String channelId = channel.getChannelId();
 		channel.setDeviceId(deviceId);
-		DeviceChannel deviceChannel = deviceChannelMapper.queryChannel(deviceId, channelId).orElse(null);;
+		DeviceChannelDefinition deviceChannel = deviceChannelMapper.queryChannel(deviceId, channelId).orElse(null);;
 
 		if (deviceChannel == null) {
 			deviceChannelMapper.save(channel);
 		}else {
-			deviceChannelMapper.save(channel);
+			JpaUtil.copyNotNullProperties2src(channel, deviceChannel);
+			deviceChannelMapper.save(deviceChannel);
 		}
 	}
 
@@ -122,10 +127,10 @@ public class VideoManagerStoragerImpl implements IVideoManagerStorager {
 	 * 获取设备
 	 *
 	 * @param deviceId 设备ID
-	 * @return Device 设备对象
+	 * @return DeviceRemoteDefinition 设备对象
 	 */
 	@Override
-	public Device queryVideoDevice(String deviceId) {
+	public DeviceRemoteDefinition queryVideoDevice(String deviceId) {
 		return deviceMapper.findByDeviceId(deviceId).orElse(null);
 	}
 
@@ -133,23 +138,23 @@ public class VideoManagerStoragerImpl implements IVideoManagerStorager {
 	public PageInfo queryChannelsByDeviceId(String deviceId, String query, Boolean hasSubChannel, Boolean online, int page, int count) {
 		// 获取到所有正在播放的流
 		PageHelper.startPage(page, count);
-		List<DeviceChannel> all = deviceChannelMapper.queryChannelsByDeviceId(deviceId, null, query, hasSubChannel, online);
+		List<DeviceChannelDefinition> all = deviceChannelMapper.queryChannelsByDeviceId(deviceId, null, query, hasSubChannel, online);
 		return new PageInfo<>(all);
 	}
 
 	@Override
-	public List<DeviceChannel> queryChannelsByDeviceId(String deviceId) {
+	public List<DeviceChannelDefinition> queryChannelsByDeviceId(String deviceId) {
 		return deviceChannelMapper.queryChannelsByDeviceId(deviceId, null,null, null, null);
 	}
 	@Override
-	public PageInfo<DeviceChannel> querySubChannels(String deviceId, String parentChannelId, String query, Boolean hasSubChannel, String online, int page, int count) {
+	public PageInfo<DeviceChannelDefinition> querySubChannels(String deviceId, String parentChannelId, String query, Boolean hasSubChannel, String online, int page, int count) {
 		PageHelper.startPage(page, count);
-		List<DeviceChannel> all = deviceChannelMapper.queryChannelsByDeviceId(deviceId, parentChannelId, null, null, null);
+		List<DeviceChannelDefinition> all = deviceChannelMapper.queryChannelsByDeviceId(deviceId, parentChannelId, null, null, null);
 		return new PageInfo<>(all);
 	}
 
 	@Override
-	public DeviceChannel queryChannel(String deviceId, String channelId) {
+	public DeviceChannelDefinition queryChannel(String deviceId, String channelId) {
 		return deviceChannelMapper.queryChannel(deviceId, channelId).orElse(null);
 	}
 
@@ -159,12 +164,12 @@ public class VideoManagerStoragerImpl implements IVideoManagerStorager {
 	 *
 	 * @param page 当前页数
 	 * @param count 每页数量
-	 * @return PageInfo<Device> 分页设备对象数组
+	 * @return PageInfo<DeviceRemoteDefinition> 分页设备对象数组
 	 */
 	@Override
-	public PageInfo<Device> queryVideoDeviceList(int page, int count) {
+	public PageInfo<DeviceRemoteDefinition> queryVideoDeviceList(int page, int count) {
 		PageHelper.startPage(page, count);
-		List<Device> all = deviceMapper.findAll();
+		List<DeviceRemoteDefinition> all = deviceMapper.findAll();
 		System.out.println(page + ">>>>"+count+">>>设备数量===" + all != null ? all.size() : 0);
 		return new PageInfo<>(all);
 	}
@@ -172,13 +177,13 @@ public class VideoManagerStoragerImpl implements IVideoManagerStorager {
 	/**
 	 * 获取多个设备
 	 *
-	 * @return List<Device> 设备对象数组
+	 * @return List<DeviceRemoteDefinition> 设备对象数组
 	 */
 	@Override
-	public List<Device> queryVideoDeviceList() {
+	public List<DeviceRemoteDefinition> queryVideoDeviceList() {
 
-		//List<Device> deviceList =  deviceMapper.getDevices();
-		List<Device> deviceList =  deviceMapper.findAll();
+		//List<DeviceRemoteDefinition> deviceList =  deviceMapper.getDevices();
+		List<DeviceRemoteDefinition> deviceList =  deviceMapper.findAll();
 		if (deviceList != null && deviceList.size() > 0) {
 
 		}
@@ -207,7 +212,7 @@ public class VideoManagerStoragerImpl implements IVideoManagerStorager {
 	 */
 	@Override
 	public synchronized boolean online(String deviceId) {
-		Device device = deviceMapper.getByDeviceId(deviceId).orElse(null);;
+		DeviceRemoteDefinition device = deviceMapper.getByDeviceId(deviceId).orElse(null);;
 		if (device == null) {
 			return false;
 		}
@@ -225,13 +230,13 @@ public class VideoManagerStoragerImpl implements IVideoManagerStorager {
 	 */
 	@Override
 	public synchronized boolean outline(String deviceId) {
-		Device device = deviceMapper.findByDeviceId(deviceId).orElse(null);;
+		DeviceRemoteDefinition device = deviceMapper.findByDeviceId(deviceId).orElse(null);;
 		if(device == null){
 			return true;
 		}
 		device.setOnline(0);
 		System.out.println("更新设备离线");
-		Device re =  deviceMapper.save(device);
+		DeviceRemoteDefinition re =  deviceMapper.save(device);
 		return re != null;
 	}
 

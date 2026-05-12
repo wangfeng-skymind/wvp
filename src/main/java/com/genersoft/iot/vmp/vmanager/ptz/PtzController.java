@@ -10,7 +10,7 @@ import org.springframework.web.context.request.async.DeferredResult;
 
 import javax.sip.message.Response;
 
-import com.genersoft.iot.vmp.gb28181.bean.Device;
+import com.genersoft.iot.vmp.gb28181.bean.DeviceRemoteDefinition;
 import com.genersoft.iot.vmp.gb28181.transmit.callback.DeferredResultHolder;
 import com.genersoft.iot.vmp.gb28181.transmit.callback.RequestMessage;
 import com.genersoft.iot.vmp.gb28181.transmit.cmd.impl.SIPCommander;
@@ -49,7 +49,7 @@ public class PtzController {
 		if (logger.isDebugEnabled()) {
 			logger.debug(String.format("设备云台控制 API调用，deviceId：%s ，channelId：%s ，cmdCode：%d ，horizonSpeed：%d ，verticalSpeed：%d ，zoomSpeed：%d",deviceId, channelId, cmdCode, horizonSpeed, verticalSpeed, zoomSpeed));
 		}
-		Device device = storager.queryVideoDevice(deviceId);
+		DeviceRemoteDefinition device = storager.queryVideoDevice(deviceId);
 		
 		cmder.frontEndCmd(device, channelId, cmdCode, horizonSpeed, verticalSpeed, zoomSpeed);
 		return new ResponseEntity<String>("success",HttpStatus.OK);
@@ -72,7 +72,7 @@ public class PtzController {
 		if (logger.isDebugEnabled()) {
 			logger.debug(String.format("设备云台控制 API调用，deviceId：%s ，channelId：%s ，cmdCode：%d parameter1：%d parameter2：%d",deviceId, channelId, cmdCode, parameter1, parameter2));
 		}
-		Device device = storager.queryVideoDevice(deviceId);
+		DeviceRemoteDefinition device = storager.queryVideoDevice(deviceId);
 		
 		cmder.frontEndCmd(device, channelId, cmdCode, parameter1, parameter2, combindCode2);
 		return new ResponseEntity<String>("success",HttpStatus.OK);
@@ -90,7 +90,7 @@ public class PtzController {
 		if (logger.isDebugEnabled()) {
 			logger.debug("设备预置位查询API调用");
 		}
-		Device device = storager.queryVideoDevice(deviceId);
+		DeviceRemoteDefinition device = storager.queryVideoDevice(deviceId);
 		cmder.presetQuery(device, channelId, event -> {
 			Response response = event.getResponse();
 			RequestMessage msg = new RequestMessage();

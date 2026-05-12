@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
-import com.genersoft.iot.vmp.gb28181.bean.Device;
+import com.genersoft.iot.vmp.gb28181.bean.DeviceRemoteDefinition;
 import com.genersoft.iot.vmp.gb28181.transmit.cmd.impl.SIPCommander;
 import com.genersoft.iot.vmp.storager.IVideoManagerStorager;
 import org.springframework.web.context.request.async.DeferredResult;
@@ -60,7 +60,7 @@ public class PlayController {
 													   @PathVariable String channelId) {
 
 
-		Device device = storager.queryVideoDevice(deviceId);
+		DeviceRemoteDefinition device = storager.queryVideoDevice(deviceId);
 		StreamInfo streamInfo = redisCatchStorage.queryPlayByDevice(deviceId, channelId);
 
 		UUID uuid = UUID.randomUUID();

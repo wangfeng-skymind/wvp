@@ -18,7 +18,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import com.genersoft.iot.vmp.conf.SipConfig;
-import com.genersoft.iot.vmp.gb28181.bean.Device;
+import com.genersoft.iot.vmp.gb28181.bean.DeviceRemoteDefinition;
 
 /**
  * @Description:摄像头命令request创造器 TODO 冗余代码太多待优化
@@ -43,7 +43,7 @@ public class SIPRequestHeaderProvider {
 	@Qualifier(value="udpSipProvider")
 	private SipProvider udpSipProvider;
 	
-	public Request createMessageRequest(Device device, String content, String viaTag, String fromTag, String toTag) throws ParseException, InvalidArgumentException, PeerUnavailableException {
+	public Request createMessageRequest(DeviceRemoteDefinition device, String content, String viaTag, String fromTag, String toTag) throws ParseException, InvalidArgumentException, PeerUnavailableException {
 		log.info("SIP.createMessageRequest==content==" + content +">===viaTag=>>"+ viaTag +">==fromTag==>>" + fromTag +">===toTag=>>" + toTag);
 		Request request = null;
 		// sipuri
@@ -78,7 +78,7 @@ public class SIPRequestHeaderProvider {
 		return request;
 	}
 	
-	public Request createInviteRequest(Device device, String channelId, String content, String viaTag, String fromTag, String toTag, String ssrc) throws ParseException, InvalidArgumentException, PeerUnavailableException {
+	public Request createInviteRequest(DeviceRemoteDefinition device, String channelId, String content, String viaTag, String fromTag, String toTag, String ssrc) throws ParseException, InvalidArgumentException, PeerUnavailableException {
 		log.info("SIP.createInviteRequest==device==" + device +">===channelId=>>"+ channelId + ">===content=>>"+ content +">===viaTag=>>"+ viaTag +">==fromTag==>>" + fromTag +">===toTag=>>" + toTag);
 
 		Request request = null;
@@ -126,7 +126,7 @@ public class SIPRequestHeaderProvider {
 		return request;
 	}
 	
-	public Request createPlaybackInviteRequest(Device device, String channelId, String content, String viaTag, String fromTag, String toTag) throws ParseException, InvalidArgumentException, PeerUnavailableException {
+	public Request createPlaybackInviteRequest(DeviceRemoteDefinition device, String channelId, String content, String viaTag, String fromTag, String toTag) throws ParseException, InvalidArgumentException, PeerUnavailableException {
 		log.info("SIP.createPlaybackInviteRequest==device==" + device +">===channelId=>>"+ channelId +">===content=>>"+ content +">===viaTag=>>"+ viaTag +">==fromTag==>>" + fromTag +">===toTag=>>" + toTag);
 
 
@@ -172,7 +172,7 @@ public class SIPRequestHeaderProvider {
 		return request;
 	}
 
-	public Request createSubscribeRequest(Device device, String content, String viaTag, String fromTag, String toTag, Integer expires, String event) throws ParseException, InvalidArgumentException, PeerUnavailableException {
+	public Request createSubscribeRequest(DeviceRemoteDefinition device, String content, String viaTag, String fromTag, String toTag, Integer expires, String event) throws ParseException, InvalidArgumentException, PeerUnavailableException {
 		log.info("SIP.createSubscribeRequest==device==" + device +">===content=>>"+ content +">===viaTag=>>"+ viaTag +">==fromTag==>>" + fromTag +">===toTag=>>" + toTag);
 
 		Request request = null;

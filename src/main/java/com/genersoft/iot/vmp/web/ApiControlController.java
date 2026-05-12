@@ -1,7 +1,7 @@
 package com.genersoft.iot.vmp.web;
 
 import com.alibaba.fastjson.JSONObject;
-import com.genersoft.iot.vmp.gb28181.bean.Device;
+import com.genersoft.iot.vmp.gb28181.bean.DeviceRemoteDefinition;
 import com.genersoft.iot.vmp.gb28181.transmit.cmd.impl.SIPCommander;
 import com.genersoft.iot.vmp.storager.IVideoManagerStorager;
 import org.slf4j.Logger;
@@ -44,7 +44,7 @@ public class ApiControlController {
             logger.debug(String.format("模拟接口> 设备云台控制 API调用，deviceId：%s ，channelId：%s ，command：%d ，speed：%d ",
                     serial, code, command, speed));
         }
-        Device device = storager.queryVideoDevice(serial);
+        DeviceRemoteDefinition device = storager.queryVideoDevice(serial);
         int leftRight = 0;
         int upDown = 0;
         int inOut = 0;

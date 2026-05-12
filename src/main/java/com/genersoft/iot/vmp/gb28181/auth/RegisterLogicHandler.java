@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
-import com.genersoft.iot.vmp.gb28181.bean.Device;
+import com.genersoft.iot.vmp.gb28181.bean.DeviceRemoteDefinition;
 import com.genersoft.iot.vmp.gb28181.transmit.cmd.impl.SIPCommander;
 
 /**    
@@ -19,7 +19,7 @@ public class RegisterLogicHandler {
 	@Autowired
 	private SIPCommander cmder;
 	
-	public void onRegister(Device device) {
+	public void onRegister(DeviceRemoteDefinition device) {
 		// TODO 后续处理，只有第一次注册时调用查询设备信息，如需更新调用更新API接口
 		cmder.deviceInfoQuery(device);
 		

@@ -10,7 +10,7 @@ package com.genersoft.iot.vmp.vmanager.device;
 import javax.sip.message.Response;
 
 import com.alibaba.fastjson.JSONObject;
-import com.genersoft.iot.vmp.gb28181.bean.Device;
+import com.genersoft.iot.vmp.gb28181.bean.DeviceRemoteDefinition;
 import com.genersoft.iot.vmp.gb28181.transmit.callback.DeferredResultHolder;
 import com.genersoft.iot.vmp.gb28181.transmit.callback.RequestMessage;
 import com.genersoft.iot.vmp.gb28181.transmit.cmd.impl.SIPCommander;
@@ -59,7 +59,7 @@ public class DeviceConfig {
         if (logger.isDebugEnabled()) {
 			logger.debug("报警复位API调用");
 		}
-		Device device = storager.queryVideoDevice(deviceId);
+		DeviceRemoteDefinition device = storager.queryVideoDevice(deviceId);
 		cmder.deviceBasicConfigCmd(device, channelId, name, expiration, heartBeatInterval, heartBeatCount, event -> {
 			Response response = event.getResponse();
 			RequestMessage msg = new RequestMessage();
@@ -96,7 +96,7 @@ public class DeviceConfig {
 		if (logger.isDebugEnabled()) {
 			logger.debug("设备状态查询API调用");
 		}
-		Device device = storager.queryVideoDevice(deviceId);
+		DeviceRemoteDefinition device = storager.queryVideoDevice(deviceId);
 		cmder.deviceConfigQuery(device, channelId, configType, event -> {
 			Response response = event.getResponse();
 			RequestMessage msg = new RequestMessage();
@@ -110,7 +110,7 @@ public class DeviceConfig {
 			// 释放rtpserver
 			RequestMessage msg = new RequestMessage();
 			msg.setId(DeferredResultHolder.CALLBACK_CMD_CONFIGDOWNLOAD + (XmlUtil.isEmpty(channelId) ? deviceId : channelId));
-			msg.setData("Timeout. Device did not response to this command.");
+			msg.setData("Timeout. DeviceRemoteDefinition did not response to this command.");
 			resultHolder.invokeResult(msg);
 		});
 		resultHolder.put(DeferredResultHolder.CALLBACK_CMD_CONFIGDOWNLOAD + (XmlUtil.isEmpty(channelId) ? deviceId : channelId), result);

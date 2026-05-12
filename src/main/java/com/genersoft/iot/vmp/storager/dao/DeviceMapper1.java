@@ -1,6 +1,6 @@
 package com.genersoft.iot.vmp.storager.dao;
 
-import com.genersoft.iot.vmp.gb28181.bean.Device;
+import com.genersoft.iot.vmp.gb28181.bean.DeviceRemoteDefinition;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
@@ -14,7 +14,7 @@ import java.util.List;
 public interface DeviceMapper1 {
 
     @Select("SELECT * FROM device WHERE deviceId = #{deviceId}")
-    Device getDeviceByDeviceId(String deviceId);
+    DeviceRemoteDefinition getDeviceByDeviceId(String deviceId);
 
     @Insert("INSERT INTO device (" +
                 "deviceId, " +
@@ -43,7 +43,7 @@ public interface DeviceMapper1 {
                 "#{hostAddress}," +
                 "#{online}" +
             ")")
-    int add(Device device);
+    int add(DeviceRemoteDefinition device);
 
     @Update(value = {" <script>" +
                 "UPDATE device " +
@@ -61,10 +61,10 @@ public interface DeviceMapper1 {
                 "<if test=\"online != null\">, online=${online}</if>" +
                 "WHERE deviceId='${deviceId}'"+
             " </script>"})
-    int update(Device device);
+    int update(DeviceRemoteDefinition device);
 
     @Select("SELECT *, (SELECT count(0) FROM device_channel WHERE deviceId=de.deviceId) as channelCount  FROM device de")
-    List<Device> getDevices();
+    List<DeviceRemoteDefinition> getDevices();
 
     @Delete("DELETE FROM device WHERE deviceId=#{deviceId}")
     int del(String deviceId);

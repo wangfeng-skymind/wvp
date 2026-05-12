@@ -1,7 +1,7 @@
 package com.genersoft.iot.vmp.storager.repository;
 
-import com.genersoft.iot.vmp.gb28181.bean.Device;
-import com.genersoft.iot.vmp.gb28181.bean.DeviceChannel;
+import com.genersoft.iot.vmp.gb28181.bean.DeviceRemoteDefinition;
+import com.genersoft.iot.vmp.gb28181.bean.DeviceChannelDefinition;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -20,13 +20,13 @@ import java.util.Optional;
  * @description: TODO
  */
 @Repository
-public interface IDeviceChannelRepository  extends JpaRepository<DeviceChannel,Long>, JpaSpecificationExecutor<DeviceChannel> {
+public interface IDeviceChannelRepository  extends JpaRepository<DeviceChannelDefinition,Long>, JpaSpecificationExecutor<DeviceChannelDefinition> {
     int deleteByDeviceId(String deviceId);
 
 
     @Query("""
     SELECT dc
-    FROM DeviceChannel dc
+    FROM DeviceChannelDefinition dc
     WHERE dc.deviceId = :deviceId
     AND (:parentChannelId IS NULL OR dc.parentId = :parentChannelId)
     AND (:online IS NULL OR dc.status = CASE WHEN :online = true THEN 1 ELSE 0 END)
@@ -38,16 +38,16 @@ public interface IDeviceChannelRepository  extends JpaRepository<DeviceChannel,L
     AND (
         (:hasSubChannel IS NULL) OR
         (:hasSubChannel = true AND
-            (SELECT COUNT(c) FROM DeviceChannel c WHERE c.parentId = dc.channelId) > 0
+            (SELECT COUNT(c) FROM DeviceChannelDefinition c WHERE c.parentId = dc.channelId) > 0
         )
         OR
         (:hasSubChannel = false AND
-            (SELECT COUNT(c) FROM DeviceChannel c WHERE c.parentId = dc.channelId) = 0
+            (SELECT COUNT(c) FROM DeviceChannelDefinition c WHERE c.parentId = dc.channelId) = 0
         )
     )
     ORDER BY dc.channelId ASC
     """)
-    List<DeviceChannel> queryChannelsByDeviceId(
+    List<DeviceChannelDefinition> queryChannelsByDeviceId(
             @Param("deviceId") String deviceId,
             @Param("parentChannelId") String parentChannelId,
             @Param("query") String query,
@@ -57,20 +57,20 @@ public interface IDeviceChannelRepository  extends JpaRepository<DeviceChannel,L
 
     @Query("""
 SELECT dc 
-FROM DeviceChannel dc 
+FROM DeviceChannelDefinition dc 
 WHERE dc.deviceId = :deviceId 
 AND dc.channelId = :channelId
 """)
-    Optional<DeviceChannel> queryChannel(
+    Optional<DeviceChannelDefinition> queryChannel(
             @Param("deviceId") String deviceId,
             @Param("channelId") String channelId
     );
-    Optional<DeviceChannel> findByDeviceIdAndChannelId(String deviceId, String channelId);
+    Optional<DeviceChannelDefinition> findByDeviceIdAndChannelId(String deviceId, String channelId);
 
     @Modifying
     @Transactional
     @Query("""
-    UPDATE DeviceChannel dc
+    UPDATE DeviceChannelDefinition dc
     SET dc.streamId = :streamId
     WHERE dc.deviceId = :deviceId
     AND dc.channelId = :channelId
@@ -85,7 +85,7 @@ AND dc.channelId = :channelId
     @Modifying(clearAutomatically = true)
     @Transactional
     @Query("""
-    UPDATE DeviceChannel dc
+    UPDATE DeviceChannelDefinition dc
     SET dc.streamId = null
     WHERE dc.deviceId = :deviceId
     AND dc.channelId = :channelId

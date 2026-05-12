@@ -15,9 +15,9 @@ import com.genersoft.iot.vmp.common.StreamInfo;
 import com.genersoft.iot.vmp.common.VideoManagerConstants;
 import com.genersoft.iot.vmp.conf.UserSetup;
 import com.genersoft.iot.vmp.gb28181.bean.BaiduPoint;
-import com.genersoft.iot.vmp.gb28181.bean.Device;
+import com.genersoft.iot.vmp.gb28181.bean.DeviceRemoteDefinition;
 import com.genersoft.iot.vmp.gb28181.bean.DeviceAlarm;
-import com.genersoft.iot.vmp.gb28181.bean.DeviceChannel;
+import com.genersoft.iot.vmp.gb28181.bean.DeviceChannelDefinition;
 import com.genersoft.iot.vmp.gb28181.bean.MobilePosition;
 import com.genersoft.iot.vmp.gb28181.bean.RecordInfo;
 import com.genersoft.iot.vmp.gb28181.bean.RecordItem;
@@ -37,6 +37,7 @@ import com.genersoft.iot.vmp.utils.GpsUtil;
 import com.genersoft.iot.vmp.utils.SpringBeanFactory;
 import com.genersoft.iot.vmp.utils.redis.RedisUtil;
 
+import lombok.extern.slf4j.Slf4j;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -50,6 +51,7 @@ import org.springframework.util.StringUtils;
  * @author: swwheihei
  * @date: 2020年5月3日 下午5:32:41
  */
+@Slf4j
 @SuppressWarnings(value={"unchecked", "rawtypes"})
 public class MessageRequestProcessor extends SIPRequestAbstractProcessor {
 
@@ -101,6 +103,7 @@ public class MessageRequestProcessor extends SIPRequestAbstractProcessor {
 		try {
 			Element rootElement = getRootElement(evt);
 			String cmd = XmlUtil.getText(rootElement, "CmdType");
+			logger.info("接收到消息==1=cmd==" + cmd);
 
 			if (MESSAGE_KEEP_ALIVE.equals(cmd)) {
 				logger.info("接收到KeepAlive消息");
@@ -139,7 +142,7 @@ public class MessageRequestProcessor extends SIPRequestAbstractProcessor {
 				logger.info("接收到PresetQuery消息");
 				processMessagePresetQuery(evt);
 			} else {
-				logger.info("接收到消息：" + cmd);
+				logger.info("接收到消息==2=cmd==" + cmd);
 				responseAck(evt);
 			}
 		} catch (DocumentException | SipException |InvalidArgumentException | ParseException e) {
@@ -158,7 +161,7 @@ public class MessageRequestProcessor extends SIPRequestAbstractProcessor {
 			MobilePosition mobilePosition = new MobilePosition();
 			Element deviceIdElement = rootElement.element("DeviceID");
 			String deviceId = deviceIdElement.getTextTrim().toString();
-			Device device = storager.queryVideoDevice(deviceId);
+			DeviceRemoteDefinition device = storager.queryVideoDevice(deviceId);
 			if (device != null) {
 				if (!StringUtils.isEmpty(device.getName())) {
 					mobilePosition.setDeviceName(device.getName());
@@ -371,10 +374,14 @@ public class MessageRequestProcessor extends SIPRequestAbstractProcessor {
 			Element deviceIdElement = rootElement.element("DeviceID");
 			String deviceId = deviceIdElement.getTextTrim().toString();
 
-			Device device = storager.queryVideoDevice(deviceId);
+			DeviceRemoteDefinition device = storager.queryVideoDevice(deviceId);
+			log.info("processMessageDeviceInfo=+==111==" + deviceId + ">>>rootElement===" + rootElement);
+
 			if (device == null) {
 				return;
 			}
+			log.info("processMessageDeviceInfo=+==2222==" + deviceId + ">>>rootElement===" + rootElement);
+
 			device.setName(XmlUtil.getText(rootElement, "DeviceName"));
 			device.setManufacturer(XmlUtil.getText(rootElement, "Manufacturer"));
 			device.setModel(XmlUtil.getText(rootElement, "Model"));
@@ -417,7 +424,7 @@ public class MessageRequestProcessor extends SIPRequestAbstractProcessor {
 			}
 			Iterator<Element> deviceListIterator = deviceListElement.elementIterator();
 			if (deviceListIterator != null) {
-				Device device = storager.queryVideoDevice(deviceId);
+				DeviceRemoteDefinition device = storager.queryVideoDevice(deviceId);
 				if (device == null) {
 					return;
 				}
@@ -433,7 +440,7 @@ public class MessageRequestProcessor extends SIPRequestAbstractProcessor {
 					String channelName = channdelNameElement != null ? channdelNameElement.getTextTrim().toString() : "";
 					Element statusElement = itemDevice.element("Status");
 					String status = statusElement != null ? statusElement.getTextTrim().toString() : "ON";
-					DeviceChannel deviceChannel = new DeviceChannel();
+					DeviceChannelDefinition deviceChannel = new DeviceChannelDefinition();
 					deviceChannel.setName(channelName);
 					deviceChannel.setChannelId(channelDeviceId);
 					// ONLINE OFFLINE  HIKVISION DS-7716N-E4 NVR的兼容性处理
@@ -533,7 +540,7 @@ public class MessageRequestProcessor extends SIPRequestAbstractProcessor {
 			// 回复200 OK
 			responseAck(evt);
 
-			Device device = storager.queryVideoDevice(deviceId);
+			DeviceRemoteDefinition device = storager.queryVideoDevice(deviceId);
 			if (device == null) {
 				return;
 			}

@@ -13,9 +13,10 @@ import javax.sip.message.Response;
 import com.genersoft.iot.vmp.common.VideoManagerConstants;
 import com.genersoft.iot.vmp.conf.UserSetup;
 import com.genersoft.iot.vmp.gb28181.bean.BaiduPoint;
-import com.genersoft.iot.vmp.gb28181.bean.Device;
+import com.genersoft.iot.vmp.gb28181.bean.DeviceRemoteDefinition;
 import com.genersoft.iot.vmp.gb28181.bean.DeviceAlarm;
-import com.genersoft.iot.vmp.gb28181.bean.DeviceChannel;
+import com.genersoft.iot.vmp.gb28181.bean.DeviceChannelDefinition;
+import com.genersoft.iot.vmp.gb28181.bean.DeviceRemoteDefinition;
 import com.genersoft.iot.vmp.gb28181.bean.MobilePosition;
 import com.genersoft.iot.vmp.gb28181.event.DeviceOffLineDetector;
 import com.genersoft.iot.vmp.gb28181.event.EventPublisher;
@@ -67,6 +68,7 @@ public class NotifyRequestProcessor extends SIPRequestAbstractProcessor {
 		try {
 			Element rootElement = getRootElement(evt);
 			String cmd = XmlUtil.getText(rootElement, "CmdType");
+			logger.info("接收到消息：NotifyRequestProcessor==1=cmd===" + cmd);
 
 			if (NOTIFY_CATALOG.equals(cmd)) {
 				logger.info("接收到Catalog通知");
@@ -78,7 +80,7 @@ public class NotifyRequestProcessor extends SIPRequestAbstractProcessor {
 				logger.info("接收到MobilePosition通知");
 				processNotifyMobilePosition(evt);
 			} else {
-				logger.info("接收到消息：" + cmd);
+				logger.info("接收到消息：NotifyRequestProcessor==2=cmd===" + cmd);
 				response200Ok(evt);
 			}
 		} catch (DocumentException | SipException | InvalidArgumentException | ParseException e) {
@@ -98,7 +100,7 @@ public class NotifyRequestProcessor extends SIPRequestAbstractProcessor {
 			MobilePosition mobilePosition = new MobilePosition();
 			Element deviceIdElement = rootElement.element("DeviceID");
 			String deviceId = deviceIdElement.getTextTrim().toString();
-			Device device = storager.queryVideoDevice(deviceId);
+			DeviceRemoteDefinition device = storager.queryVideoDevice(deviceId);
 			if (device != null) {
 				if (!StringUtils.isEmpty(device.getName())) {
 					mobilePosition.setDeviceName(device.getName());
@@ -151,7 +153,7 @@ public class NotifyRequestProcessor extends SIPRequestAbstractProcessor {
 			Element deviceIdElement = rootElement.element("DeviceID");
 			String deviceId = deviceIdElement.getText().toString();
 
-			Device device = storager.queryVideoDevice(deviceId);
+			DeviceRemoteDefinition device = storager.queryVideoDevice(deviceId);
 			if (device == null) {
 				return;
 			}
@@ -222,7 +224,7 @@ public class NotifyRequestProcessor extends SIPRequestAbstractProcessor {
 			}
 			Iterator<Element> deviceListIterator = deviceListElement.elementIterator();
 			if (deviceListIterator != null) {
-				Device device = storager.queryVideoDevice(deviceId);
+				DeviceRemoteDefinition device = storager.queryVideoDevice(deviceId);
 				if (device == null) {
 					return;
 				}
@@ -238,7 +240,7 @@ public class NotifyRequestProcessor extends SIPRequestAbstractProcessor {
 					String channelName = channdelNameElement != null ? channdelNameElement.getTextTrim().toString() : "";
 					Element statusElement = itemDevice.element("Status");
 					String status = statusElement != null ? statusElement.getTextTrim().toString() : "ON";
-					DeviceChannel deviceChannel = new DeviceChannel();
+					DeviceChannelDefinition deviceChannel = new DeviceChannelDefinition();
 					deviceChannel.setName(channelName);
 					deviceChannel.setChannelId(channelDeviceId);
 					// ONLINE OFFLINE HIKVISION DS-7716N-E4 NVR的兼容性处理

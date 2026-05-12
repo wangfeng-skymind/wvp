@@ -3,7 +3,7 @@ package com.genersoft.iot.vmp.storager.impl;
 import com.genersoft.iot.vmp.common.StreamInfo;
 import com.genersoft.iot.vmp.common.VideoManagerConstants;
 import com.genersoft.iot.vmp.conf.MediaServerConfig;
-import com.genersoft.iot.vmp.gb28181.bean.DeviceChannel;
+import com.genersoft.iot.vmp.gb28181.bean.DeviceChannelDefinition;
 import com.genersoft.iot.vmp.storager.IRedisCatchStorage;
 //import com.genersoft.iot.vmp.storager.dao.DeviceChannelMapper;
 import com.genersoft.iot.vmp.storager.repository.IDeviceChannelRepository;
@@ -133,7 +133,7 @@ public class RedisCatchStorageImpl implements IRedisCatchStorage {
     @Override
     public boolean stopPlayback(StreamInfo streamInfo) {
         if (streamInfo == null) return false;
-        DeviceChannel deviceChannel = deviceChannelMapper.queryChannel(streamInfo.getDeviceID(), streamInfo.getChannelId()).get();
+        DeviceChannelDefinition deviceChannel = deviceChannelMapper.queryChannel(streamInfo.getDeviceID(), streamInfo.getChannelId()).get();
         if (deviceChannel != null) {
             deviceChannel.setStreamId(null);
             deviceChannel.setDeviceId(streamInfo.getDeviceID());

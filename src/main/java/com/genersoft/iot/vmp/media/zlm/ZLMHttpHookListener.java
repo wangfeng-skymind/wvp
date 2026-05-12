@@ -6,7 +6,7 @@ import java.util.UUID;
 import com.alibaba.fastjson.JSON;
 import com.genersoft.iot.vmp.common.StreamInfo;
 import com.genersoft.iot.vmp.conf.MediaServerConfig;
-import com.genersoft.iot.vmp.gb28181.bean.Device;
+import com.genersoft.iot.vmp.gb28181.bean.DeviceRemoteDefinition;
 import com.genersoft.iot.vmp.storager.IRedisCatchStorage;
 import com.genersoft.iot.vmp.storager.IVideoManagerStorager;
 import com.genersoft.iot.vmp.vmanager.service.IPlayService;
@@ -335,7 +335,7 @@ public class ZLMHttpHookListener {
 				if (s.length == 4) {
 					String deviceId = s[2];
 					String channelId = s[3];
-					Device device = storager.queryVideoDevice(deviceId);
+					DeviceRemoteDefinition device = storager.queryVideoDevice(deviceId);
 					if (device != null) {
 						UUID uuid = UUID.randomUUID();
 						cmder.playStreamCmd(device, channelId, (JSONObject response) -> {
