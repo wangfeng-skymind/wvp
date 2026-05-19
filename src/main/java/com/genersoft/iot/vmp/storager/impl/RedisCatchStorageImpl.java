@@ -136,7 +136,7 @@ public class RedisCatchStorageImpl implements IRedisCatchStorage {
         DeviceChannelDefinition deviceChannel = deviceChannelMapper.queryChannel(streamInfo.getDeviceID(), streamInfo.getChannelId()).get();
         if (deviceChannel != null) {
             deviceChannel.setStreamId(null);
-            deviceChannel.setDeviceId(streamInfo.getDeviceID());
+            deviceChannel.setDevice_id(streamInfo.getDeviceID());
             deviceChannelMapper.save(deviceChannel);
         }
         return redis.del(String.format("%S_%s_%s_%s", VideoManagerConstants.PLAY_BLACK_PREFIX,

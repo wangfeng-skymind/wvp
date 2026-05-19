@@ -21,34 +21,40 @@ import java.util.Optional;
  */
 @Repository
 public interface IDeviceChannelRepository  extends JpaRepository<DeviceChannelDefinition,Long>, JpaSpecificationExecutor<DeviceChannelDefinition> {
-    int deleteByDeviceId(String deviceId);
-
+   // int deleteByDeviceId(String device_id);
+   @Transactional
+   @Modifying
+   @Query("""
+       delete from DeviceChannelDefinition
+       where device_id = :deviceId
+       """)
+   int deleteByDeviceId(  @Param("deviceId") String deviceId );
 
     @Query("""
     SELECT dc
     FROM DeviceChannelDefinition dc
-    WHERE dc.deviceId = :deviceId
+    WHERE dc.device_id = :device_id
     AND (:parentChannelId IS NULL OR dc.parentId = :parentChannelId)
     AND (:online IS NULL OR dc.status = CASE WHEN :online = true THEN 1 ELSE 0 END)
     AND (
         :query IS NULL OR
-        dc.channelId LIKE %:query% OR
+        dc.channel_id LIKE %:query% OR
         dc.name LIKE %:query%
     )
     AND (
         (:hasSubChannel IS NULL) OR
         (:hasSubChannel = true AND
-            (SELECT COUNT(c) FROM DeviceChannelDefinition c WHERE c.parentId = dc.channelId) > 0
+            (SELECT COUNT(c) FROM DeviceChannelDefinition c WHERE c.parentId = dc.channel_id) > 0
         )
         OR
         (:hasSubChannel = false AND
-            (SELECT COUNT(c) FROM DeviceChannelDefinition c WHERE c.parentId = dc.channelId) = 0
+            (SELECT COUNT(c) FROM DeviceChannelDefinition c WHERE c.parentId = dc.channel_id) = 0
         )
     )
-    ORDER BY dc.channelId ASC
+    ORDER BY dc.channel_id ASC
     """)
     List<DeviceChannelDefinition> queryChannelsByDeviceId(
-            @Param("deviceId") String deviceId,
+            @Param("device_id") String device_id,
             @Param("parentChannelId") String parentChannelId,
             @Param("query") String query,
             @Param("hasSubChannel") Boolean hasSubChannel,
@@ -58,26 +64,34 @@ public interface IDeviceChannelRepository  extends JpaRepository<DeviceChannelDe
     @Query("""
 SELECT dc 
 FROM DeviceChannelDefinition dc 
-WHERE dc.deviceId = :deviceId 
-AND dc.channelId = :channelId
+WHERE dc.device_id = :device_id 
+AND dc.channel_id = :channel_id
 """)
     Optional<DeviceChannelDefinition> queryChannel(
-            @Param("deviceId") String deviceId,
-            @Param("channelId") String channelId
+            @Param("device_id") String device_id,
+            @Param("channel_id") String channel_id
     );
-    Optional<DeviceChannelDefinition> findByDeviceIdAndChannelId(String deviceId, String channelId);
+  //  Optional<DeviceChannelDefinition> findByDeviceIdAndChannelId(String device_id, String channel_id);
+
+
+    @Query("""
+       from DeviceChannelDefinition
+       where device_id = :deviceId
+       and channel_id = :channelId
+       """)
+    Optional<DeviceChannelDefinition> findByDeviceIdAndChannelId(@Param("deviceId") String deviceId, @Param("channelId") String channelId);
 
     @Modifying
     @Transactional
     @Query("""
     UPDATE DeviceChannelDefinition dc
     SET dc.streamId = :streamId
-    WHERE dc.deviceId = :deviceId
-    AND dc.channelId = :channelId
+    WHERE dc.device_id = :device_id
+    AND dc.channel_id = :channel_id
     """)
     int startPlay(
-            @Param("deviceId") String deviceId,
-            @Param("channelId") String channelId,
+            @Param("device_id") String device_id,
+            @Param("channel_id") String channel_id,
             @Param("streamId") String streamId
     );
 
@@ -87,11 +101,11 @@ AND dc.channelId = :channelId
     @Query("""
     UPDATE DeviceChannelDefinition dc
     SET dc.streamId = null
-    WHERE dc.deviceId = :deviceId
-    AND dc.channelId = :channelId
+    WHERE dc.device_id = :device_id
+    AND dc.channel_id = :channel_id
     """)
     int stopPlay(
-            @Param("deviceId") String deviceId,
-            @Param("channelId") String channelId
+            @Param("device_id") String device_id,
+            @Param("channel_id") String channel_id
     );
 }

@@ -299,7 +299,7 @@ public class SIPCommander implements ISIPCommander {
 			String ssrc = streamSession.createPlaySsrc();
 			String streamId = null;
 			if (rtpEnable) {
-				streamId = String.format("gb_play_%s_%s", device.getDeviceId(), channelId);
+				streamId = String.format("gb_play_%s_%s", device.getDevice_id(), channelId);
 			}else {
 				streamId = String.format("%08x", Integer.parseInt(ssrc)).toUpperCase();
 			}
@@ -612,7 +612,7 @@ public class SIPCommander implements ISIPCommander {
 			cmdXml.append("<CmdType>DeviceControl</CmdType>\r\n");
 			cmdXml.append("<SN>" + (int)((Math.random()*9+1)*100000) + "</SN>\r\n");
 			if (XmlUtil.isEmpty(channelId)) {
-				cmdXml.append("<DeviceID>" + device.getDeviceId() + "</DeviceID>\r\n");
+				cmdXml.append("<DeviceID>" + device.getDevice_id() + "</DeviceID>\r\n");
 			} else {
 				cmdXml.append("<DeviceID>" + channelId + "</DeviceID>\r\n");
 			}
@@ -642,7 +642,7 @@ public class SIPCommander implements ISIPCommander {
 			cmdXml.append("<Control>\r\n");
 			cmdXml.append("<CmdType>DeviceControl</CmdType>\r\n");
 			cmdXml.append("<SN>" + (int)((Math.random()*9+1)*100000) + "</SN>\r\n");
-			cmdXml.append("<DeviceID>" + device.getDeviceId() + "</DeviceID>\r\n");
+			cmdXml.append("<DeviceID>" + device.getDevice_id() + "</DeviceID>\r\n");
 			cmdXml.append("<TeleBoot>Boot</TeleBoot>\r\n");
 			cmdXml.append("</Control>\r\n");
 			
@@ -670,7 +670,7 @@ public class SIPCommander implements ISIPCommander {
 			cmdXml.append("<Control>\r\n");
 			cmdXml.append("<CmdType>DeviceControl</CmdType>\r\n");
 			cmdXml.append("<SN>" + (int)((Math.random()*9+1)*100000) + "</SN>\r\n");
-			cmdXml.append("<DeviceID>" + device.getDeviceId() + "</DeviceID>\r\n");
+			cmdXml.append("<DeviceID>" + device.getDevice_id() + "</DeviceID>\r\n");
 			cmdXml.append("<GuardCmd>" + guardCmdStr + "</GuardCmd>\r\n");
 			cmdXml.append("</Control>\r\n");
 			
@@ -697,7 +697,7 @@ public class SIPCommander implements ISIPCommander {
 			cmdXml.append("<Control>\r\n");
 			cmdXml.append("<CmdType>DeviceControl</CmdType>\r\n");
 			cmdXml.append("<SN>" + (int)((Math.random()*9+1)*100000) + "</SN>\r\n");
-			cmdXml.append("<DeviceID>" + device.getDeviceId() + "</DeviceID>\r\n");
+			cmdXml.append("<DeviceID>" + device.getDevice_id() + "</DeviceID>\r\n");
 			cmdXml.append("<AlarmCmd>ResetAlarm</AlarmCmd>\r\n");
 			if (!XmlUtil.isEmpty(alarmMethod) || !XmlUtil.isEmpty(alarmType)) {
 				cmdXml.append("<Info>\r\n");
@@ -738,7 +738,7 @@ public class SIPCommander implements ISIPCommander {
 			cmdXml.append("<CmdType>DeviceControl</CmdType>\r\n");
 			cmdXml.append("<SN>" + (int)((Math.random()*9+1)*100000) + "</SN>\r\n");
 			if (XmlUtil.isEmpty(channelId)) {
-				cmdXml.append("<DeviceID>" + device.getDeviceId() + "</DeviceID>\r\n");
+				cmdXml.append("<DeviceID>" + device.getDevice_id() + "</DeviceID>\r\n");
 			} else {
 				cmdXml.append("<DeviceID>" + channelId + "</DeviceID>\r\n");
 			}
@@ -770,7 +770,7 @@ public class SIPCommander implements ISIPCommander {
 
 			// NVR 下的通道 ID（摄像头在 NVR 下的国标 ID）
 			if (XmlUtil.isEmpty(channelId)) {
-				cmdXml.append("<DeviceID>").append(nvrDevice.getDeviceId()).append("</DeviceID>\r\n");
+				cmdXml.append("<DeviceID>").append(nvrDevice.getDevice_id()).append("</DeviceID>\r\n");
 			} else {
 				cmdXml.append("<DeviceID>").append(channelId).append("</DeviceID>\r\n");
 			}
@@ -822,7 +822,7 @@ public class SIPCommander implements ISIPCommander {
 			cmdXml.append("<CmdType>DeviceControl</CmdType>\r\n");
 			cmdXml.append("<SN>" + (int)((Math.random()*9+1)*100000) + "</SN>\r\n");
 			if (XmlUtil.isEmpty(channelId)) {
-				cmdXml.append("<DeviceID>" + device.getDeviceId() + "</DeviceID>\r\n");
+				cmdXml.append("<DeviceID>" + device.getDevice_id() + "</DeviceID>\r\n");
 			} else {
 				cmdXml.append("<DeviceID>" + channelId + "</DeviceID>\r\n");
 			}
@@ -886,7 +886,7 @@ public class SIPCommander implements ISIPCommander {
 			cmdXml.append("<CmdType>DeviceConfig</CmdType>\r\n");
 			cmdXml.append("<SN>" + (int)((Math.random()*9+1)*100000) + "</SN>\r\n");
 			if (XmlUtil.isEmpty(channelId)) {
-				cmdXml.append("<DeviceID>" + device.getDeviceId() + "</DeviceID>\r\n");
+				cmdXml.append("<DeviceID>" + device.getDevice_id() + "</DeviceID>\r\n");
 			} else {
 				cmdXml.append("<DeviceID>" + channelId + "</DeviceID>\r\n");
 			}
@@ -935,7 +935,7 @@ public class SIPCommander implements ISIPCommander {
 			catalogXml.append("<Query>\r\n");
 			catalogXml.append("<CmdType>DeviceStatus</CmdType>\r\n");
 			catalogXml.append("<SN>" + (int)((Math.random()*9+1)*100000) + "</SN>\r\n");
-			catalogXml.append("<DeviceID>" + device.getDeviceId() + "</DeviceID>\r\n");
+			catalogXml.append("<DeviceID>" + device.getDevice_id() + "</DeviceID>\r\n");
 			catalogXml.append("</Query>\r\n");
 			
 			String tm = Long.toString(System.currentTimeMillis());
@@ -963,7 +963,7 @@ public class SIPCommander implements ISIPCommander {
 			catalogXml.append("<Query>\r\n");
 			catalogXml.append("<CmdType>DeviceInfo</CmdType>\r\n");
 			catalogXml.append("<SN>" + (int)((Math.random()*9+1)*100000) + "</SN>\r\n");
-			catalogXml.append("<DeviceID>" + device.getDeviceId() + "</DeviceID>\r\n");
+			catalogXml.append("<DeviceID>" + device.getDevice_id() + "</DeviceID>\r\n");
 			catalogXml.append("</Query>\r\n");
 			
 			String tm = Long.toString(System.currentTimeMillis());
@@ -986,14 +986,14 @@ public class SIPCommander implements ISIPCommander {
 	@Override
 	public boolean catalogQuery(DeviceRemoteDefinition device, SipSubscribe.Event errorEvent) {
 		// 清空通道
-		storager.cleanChannelsForDevice(device.getDeviceId());
+		storager.cleanChannelsForDevice(device.getDevice_id());
 		try {
 			StringBuffer catalogXml = new StringBuffer(200);
 			catalogXml.append("<?xml version=\"1.0\" encoding=\"GB2312\"?>\r\n");
 			catalogXml.append("<Query>\r\n");
 			catalogXml.append("<CmdType>Catalog</CmdType>\r\n");
 			catalogXml.append("<SN>" + (int)((Math.random()*9+1)*100000) + "</SN>\r\n");
-			catalogXml.append("<DeviceID>" + device.getDeviceId() + "</DeviceID>\r\n");
+			catalogXml.append("<DeviceID>" + device.getDevice_id() + "</DeviceID>\r\n");
 			catalogXml.append("</Query>\r\n");
 			
 			String tm = Long.toString(System.currentTimeMillis());
@@ -1063,7 +1063,7 @@ public class SIPCommander implements ISIPCommander {
 			cmdXml.append("<Query>\r\n");
 			cmdXml.append("<CmdType>Alarm</CmdType>\r\n");
 			cmdXml.append("<SN>" + (int)((Math.random()*9+1)*100000) + "</SN>\r\n");
-			cmdXml.append("<DeviceID>" + device.getDeviceId() + "</DeviceID>\r\n");
+			cmdXml.append("<DeviceID>" + device.getDevice_id() + "</DeviceID>\r\n");
 			if (!XmlUtil.isEmpty(startPriority)) {
 				cmdXml.append("<StartAlarmPriority>" + startPriority + "</StartAlarmPriority>\r\n");
 			}
@@ -1110,7 +1110,7 @@ public class SIPCommander implements ISIPCommander {
 			cmdXml.append("<CmdType>ConfigDownload</CmdType>\r\n");
 			cmdXml.append("<SN>" + (int)((Math.random()*9+1)*100000) + "</SN>\r\n");
 			if (XmlUtil.isEmpty(channelId)) {
-				cmdXml.append("<DeviceID>" + device.getDeviceId() + "</DeviceID>\r\n");
+				cmdXml.append("<DeviceID>" + device.getDevice_id() + "</DeviceID>\r\n");
 			} else {
 				cmdXml.append("<DeviceID>" + channelId + "</DeviceID>\r\n");
 			}
@@ -1141,7 +1141,7 @@ public class SIPCommander implements ISIPCommander {
 			cmdXml.append("<CmdType>PresetQuery</CmdType>\r\n");
 			cmdXml.append("<SN>" + (int)((Math.random()*9+1)*100000) + "</SN>\r\n");
 			if (XmlUtil.isEmpty(channelId)) {
-				cmdXml.append("<DeviceID>" + device.getDeviceId() + "</DeviceID>\r\n");
+				cmdXml.append("<DeviceID>" + device.getDevice_id() + "</DeviceID>\r\n");
 			} else {
 				cmdXml.append("<DeviceID>" + channelId + "</DeviceID>\r\n");
 			}
@@ -1170,7 +1170,7 @@ public class SIPCommander implements ISIPCommander {
 			mobilePostitionXml.append("<Query>\r\n");
 			mobilePostitionXml.append("<CmdType>MobilePosition</CmdType>\r\n");
 			mobilePostitionXml.append("<SN>" + (int)((Math.random()*9+1)*100000) + "</SN>\r\n");
-			mobilePostitionXml.append("<DeviceID>" + device.getDeviceId() + "</DeviceID>\r\n");
+			mobilePostitionXml.append("<DeviceID>" + device.getDevice_id() + "</DeviceID>\r\n");
 			mobilePostitionXml.append("<Interval>60</Interval>\r\n");
 			mobilePostitionXml.append("</Query>\r\n");
 			
@@ -1201,7 +1201,7 @@ public class SIPCommander implements ISIPCommander {
 			subscribePostitionXml.append("<Query>\r\n");
 			subscribePostitionXml.append("<CmdType>MobilePosition</CmdType>\r\n");
 			subscribePostitionXml.append("<SN>" + (int)((Math.random()*9+1)*100000) + "</SN>\r\n");
-			subscribePostitionXml.append("<DeviceID>" + device.getDeviceId() + "</DeviceID>\r\n");
+			subscribePostitionXml.append("<DeviceID>" + device.getDevice_id() + "</DeviceID>\r\n");
 			if (expires > 0) {
 				subscribePostitionXml.append("<Interval>" + String.valueOf(interval) + "</Interval>\r\n");
 			}
@@ -1239,7 +1239,7 @@ public class SIPCommander implements ISIPCommander {
 			cmdXml.append("<Query>\r\n");
 			cmdXml.append("<CmdType>Alarm</CmdType>\r\n");
 			cmdXml.append("<SN>" + (int)((Math.random()*9+1)*100000) + "</SN>\r\n");
-			cmdXml.append("<DeviceID>" + device.getDeviceId() + "</DeviceID>\r\n");
+			cmdXml.append("<DeviceID>" + device.getDevice_id() + "</DeviceID>\r\n");
 			if (!XmlUtil.isEmpty(startPriority)) {
 				cmdXml.append("<StartAlarmPriority>" + startPriority + "</StartAlarmPriority>\r\n");
 			}
@@ -1309,10 +1309,10 @@ public class SIPCommander implements ISIPCommander {
 	@Override
 	public void closeRTPServer(DeviceRemoteDefinition device, String channelId) {
 
-		System.out.println("closeRTPServer>>>>>ff>>=====" + device.getDeviceId() + "------" + channelId);
+		System.out.println("closeRTPServer>>>>>ff>>=====" + device.getDevice_id() + "------" + channelId);
 		if (rtpEnable) {
-			System.out.println("closeRTPServer>>>>>ff>>tt=====" + device.getDeviceId() + "------" + channelId);
-			String streamId = String.format("gb_play_%s_%s", device.getDeviceId(), channelId);
+			System.out.println("closeRTPServer>>>>>ff>>tt=====" + device.getDevice_id() + "------" + channelId);
+			String streamId = String.format("gb_play_%s_%s", device.getDevice_id(), channelId);
 			zlmrtpServerFactory.closeRTPServer(streamId);
 		}
 	}

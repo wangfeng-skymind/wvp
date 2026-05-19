@@ -72,7 +72,7 @@ public class ApiDeviceController {
         JSONArray deviceJSONList = new JSONArray();
         for (DeviceRemoteDefinition device : devices) {
             JSONObject deviceJsonObject = new JSONObject();
-            deviceJsonObject.put("ID", device.getDeviceId());
+            deviceJsonObject.put("ID", device.getDevice_id());
             deviceJsonObject.put("Name", device.getName());
             deviceJsonObject.put("Type", "GB");
             deviceJsonObject.put("ChannelCount", device.getChannelCount());
@@ -127,8 +127,8 @@ public class ApiDeviceController {
         JSONArray channleJSONList = new JSONArray();
         for (DeviceChannelDefinition deviceChannel : deviceChannels) {
             JSONObject deviceJOSNChannel = new JSONObject();
-            deviceJOSNChannel.put("ID", deviceChannel.getChannelId());
-            deviceJOSNChannel.put("DeviceID", device.getDeviceId());
+            deviceJOSNChannel.put("ID", deviceChannel.getChannel_id());
+            deviceJOSNChannel.put("DeviceID", device.getDevice_id());
             deviceJOSNChannel.put("DeviceName", device.getName());
             deviceJOSNChannel.put("DeviceOnline", device.getOnline() == 1);
             deviceJOSNChannel.put("Channel", 0); // TODO 自定义序号

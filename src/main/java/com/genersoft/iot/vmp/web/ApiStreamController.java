@@ -107,7 +107,7 @@ public class ApiStreamController {
             StreamInfo streamInfo = JSON.parseObject(responseEntity.getBody(), StreamInfo.class);
             JSONObject result = new JSONObject();
             result.put("StreamID", streamInfo.getStreamId());
-            result.put("DeviceID", device.getDeviceId());
+            result.put("DeviceID", device.getDevice_id());
             result.put("ChannelID", code);
             result.put("ChannelName", deviceChannel.getName());
             result.put("ChannelCustomName", "");

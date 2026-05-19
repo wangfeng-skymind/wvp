@@ -61,19 +61,19 @@ public class ScheduleSnapshotStartupListener implements ApplicationListener<Appl
 
                 DeviceRemoteDefinition nvrDevice = devices.get(i);
                 int online = nvrDevice.getOnline();
-                logger.info("设备id===DeviceID=="+nvrDevice.getDeviceId()+"==online==="+online);
+                logger.info("设备id===DeviceID=="+nvrDevice.getDevice_id()+"==online==="+online);
 
                 if(online >= 1) {
-                    List<DeviceChannelDefinition> channels = storager.queryChannelsByDeviceId(nvrDevice.getDeviceId());
+                    List<DeviceChannelDefinition> channels = storager.queryChannelsByDeviceId(nvrDevice.getDevice_id());
                     for (int j = 0; channels != null && j < channels.size(); j++) {
                         DeviceChannelDefinition channel = channels.get(j);
-                        String channelId = channel.getChannelId();
+                        String channelId = channel.getChannel_id();
                         logger.info("==通道===channelId==="+channelId);
                         String uploadUrl = "http://zhijianyunjian.com/device-service/api/video/nvr_upload";
                         boolean sucsess = cmder.screenshotByeCmd(nvrDevice, channelId, uploadUrl);
                         if (sucsess) {
                             JSONObject json = new JSONObject();
-                            json.put("DeviceID", nvrDevice.getDeviceId());
+                            json.put("DeviceID", nvrDevice.getDevice_id());
                             json.put("ChannelID", channelId);
                             json.put("Result", "OK");
 

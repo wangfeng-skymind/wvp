@@ -425,6 +425,7 @@ public class MessageRequestProcessor extends SIPRequestAbstractProcessor {
 			Iterator<Element> deviceListIterator = deviceListElement.elementIterator();
 			if (deviceListIterator != null) {
 				DeviceRemoteDefinition device = storager.queryVideoDevice(deviceId);
+				log.info("==根据devce_id===查询设备==" + deviceId + ">>>device===" + JSONObject.toJSONString(device));
 				if (device == null) {
 					return;
 				}
@@ -442,7 +443,7 @@ public class MessageRequestProcessor extends SIPRequestAbstractProcessor {
 					String status = statusElement != null ? statusElement.getTextTrim().toString() : "ON";
 					DeviceChannelDefinition deviceChannel = new DeviceChannelDefinition();
 					deviceChannel.setName(channelName);
-					deviceChannel.setChannelId(channelDeviceId);
+					deviceChannel.setChannel_id(channelDeviceId);
 					// ONLINE OFFLINE  HIKVISION DS-7716N-E4 NVR的兼容性处理
 					if (status.equals("ON") || status.equals("On") || status.equals("ONLINE")) {
 						deviceChannel.setStatus(1);
@@ -509,7 +510,7 @@ public class MessageRequestProcessor extends SIPRequestAbstractProcessor {
 						deviceChannel.setPTZType(Integer.parseInt(XmlUtil.getText(itemDevice, "PTZType")));
 					}
 					deviceChannel.setHasAudio(true); // 默认含有音频，播放时再检查是否有音频及是否AAC
-					storager.updateChannel(device.getDeviceId(), deviceChannel);
+					storager.updateChannel(device.getDevice_id(), deviceChannel);
 				}
 
 				RequestMessage msg = new RequestMessage();

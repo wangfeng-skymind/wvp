@@ -54,7 +54,7 @@ public class VideoManagerStoragerImpl implements IVideoManagerStorager {
 	 */
 	@Override
 	public boolean exists(String deviceId) {
-		DeviceRemoteDefinition re = deviceMapper.getByDeviceId(deviceId).orElse(null);
+		DeviceRemoteDefinition re = deviceMapper.getByDevice_id(deviceId).orElse(null);
 
 		return re != null;
 	}
@@ -69,7 +69,7 @@ public class VideoManagerStoragerImpl implements IVideoManagerStorager {
 	public synchronized boolean create(DeviceRemoteDefinition device) {
 		device = deviceMapper.save(device);
 
-		return device.getDeviceId() != null? true : false;
+		return device.getDevice_id() != null? true : false;
 	}
 
 
@@ -83,26 +83,26 @@ public class VideoManagerStoragerImpl implements IVideoManagerStorager {
 	@Override
 	public synchronized boolean updateDevice(DeviceRemoteDefinition device) {
 
-		DeviceRemoteDefinition deviceByDevice = deviceMapper.findByDeviceId(device.getDeviceId()).orElse(null);
+		DeviceRemoteDefinition deviceByDevice = deviceMapper.findByDevice_id(device.getDevice_id()).orElse(null);
 
 
 		if (deviceByDevice == null) {
 			deviceMapper.save(device);
-			return device.getDeviceId() != null? true : false;
+			return device.getDevice_id() != null? true : false;
 
 		}else {
 			JpaUtil.copyNotNullProperties2src(device, deviceByDevice);
 			deviceByDevice.setUpdate_time(LocalDateTime.now());
 			device = deviceMapper.save(deviceByDevice);
-			return device.getDeviceId() != null? true : false;
+			return device.getDevice_id() != null? true : false;
 
 		}
 	}
 
 	@Override
 	public synchronized void updateChannel(String deviceId, DeviceChannelDefinition channel) {
-		String channelId = channel.getChannelId();
-		channel.setDeviceId(deviceId);
+		String channelId = channel.getChannel_id();
+		channel.setDevice_id(deviceId);
 		DeviceChannelDefinition deviceChannel = deviceChannelMapper.queryChannel(deviceId, channelId).orElse(null);;
 
 		if (deviceChannel == null) {
@@ -131,7 +131,7 @@ public class VideoManagerStoragerImpl implements IVideoManagerStorager {
 	 */
 	@Override
 	public DeviceRemoteDefinition queryVideoDevice(String deviceId) {
-		return deviceMapper.findByDeviceId(deviceId).orElse(null);
+		return deviceMapper.findByDevice_id(deviceId).orElse(null);
 	}
 
 	@Override
@@ -199,7 +199,7 @@ public class VideoManagerStoragerImpl implements IVideoManagerStorager {
 	 */
 	@Override
 	public boolean delete(String deviceId) {
-		int result = deviceMapper.deleteByDeviceId(deviceId);
+		int result = deviceMapper.deleteByDevice_id(deviceId);
 
 		return result > 0;
 	}
@@ -212,14 +212,14 @@ public class VideoManagerStoragerImpl implements IVideoManagerStorager {
 	 */
 	@Override
 	public synchronized boolean online(String deviceId) {
-		DeviceRemoteDefinition device = deviceMapper.getByDeviceId(deviceId).orElse(null);;
+		DeviceRemoteDefinition device = deviceMapper.getByDevice_id(deviceId).orElse(null);;
 		if (device == null) {
 			return false;
 		}
 		device.setOnline(1);
 		System.out.println("更新设备在线");
 		device =  deviceMapper.save(device);
-		return device.getDeviceId() != null? true : false;
+		return device.getDevice_id() != null? true : false;
 	}
 
 	/**
@@ -230,7 +230,7 @@ public class VideoManagerStoragerImpl implements IVideoManagerStorager {
 	 */
 	@Override
 	public synchronized boolean outline(String deviceId) {
-		DeviceRemoteDefinition device = deviceMapper.findByDeviceId(deviceId).orElse(null);;
+		DeviceRemoteDefinition device = deviceMapper.findByDevice_id(deviceId).orElse(null);;
 		if(device == null){
 			return true;
 		}

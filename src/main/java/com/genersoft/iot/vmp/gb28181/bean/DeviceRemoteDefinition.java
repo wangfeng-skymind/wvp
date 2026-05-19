@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.checkerframework.common.aliasing.qual.Unique;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -23,19 +24,19 @@ import java.util.List;
 @Data
 public class DeviceRemoteDefinition {
 
-/*
+
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	private Long device_id_;
-*/
+	private Long device_remote_id;
+
 
 
 	/**
 	 * 设备Id
 	 */
-	@Id
-	private String deviceId;
+	@Column(unique = true)
+	private String device_id;
 
 	/**
 	 * 设备名
@@ -108,124 +109,11 @@ public class DeviceRemoteDefinition {
 	 * 通道个数
 	 */
 	private int channelCount;
-	@OneToMany(fetch = FetchType.EAGER) // 或 FetchType.EAGER 自动加载
-	@JoinColumn(name = "deviceId", insertable = false, updatable = false)
-	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+/*	@OneToMany(fetch = FetchType.EAGER) // 或 FetchType.EAGER 自动加载
+	@JoinColumn(name = "device_id",referencedColumnName = "device_id", insertable = false, updatable = false)
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})*/
+	@Transient
 	private List<DeviceChannelDefinition> channels;
 
 
-
-
-/*
-	public String getLocal_ip() {
-		return local_ip;
-	}
-
-	public void setLocal_ip(String local_ip) {
-		this.local_ip = local_ip;
-	}
-
-	public String getDeviceId() {
-		return deviceId;
-	}
-
-	public void setDeviceId(String deviceId) {
-		this.deviceId = deviceId;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getManufacturer() {
-		return manufacturer;
-	}
-
-	public void setManufacturer(String manufacturer) {
-		this.manufacturer = manufacturer;
-	}
-
-	public String getModel() {
-		return model;
-	}
-
-	public void setModel(String model) {
-		this.model = model;
-	}
-
-	public String getFirmware() {
-		return firmware;
-	}
-
-	public void setFirmware(String firmware) {
-		this.firmware = firmware;
-	}
-
-	public String getTransport() {
-		return transport;
-	}
-
-	public void setTransport(String transport) {
-		this.transport = transport;
-	}
-
-	public String getStreamMode() {
-		return streamMode;
-	}
-
-	public void setStreamMode(String streamMode) {
-		this.streamMode = streamMode;
-	}
-
-	public String getIp() {
-		return ip;
-	}
-
-	public void setIp(String ip) {
-		this.ip = ip;
-	}
-
-	public int getPort() {
-		return port;
-	}
-
-	public void setPort(int port) {
-		this.port = port;
-	}
-
-	public String getHostAddress() {
-		return hostAddress;
-	}
-
-	public void setHostAddress(String hostAddress) {
-		this.hostAddress = hostAddress;
-	}
-
-	public int getOnline() {
-		return online;
-	}
-
-	public void setOnline(int online) {
-		this.online = online;
-	}
-
-	public int getChannelCount() {
-		return channelCount;
-	}
-
-	public void setChannelCount(int channelCount) {
-		this.channelCount = channelCount;
-	}
-
-	public Long getRegisterTimeMillis() {
-		return registerTimeMillis;
-	}
-
-	public void setRegisterTimeMillis(Long registerTimeMillis) {
-		this.registerTimeMillis = registerTimeMillis;
-	}*/
 }

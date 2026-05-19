@@ -149,7 +149,7 @@ public class RegisterRequestProcessor extends SIPRequestAbstractProcessor {
 				//device.setStreamMode("UDP");
 				device.setStreamMode("TCP-PASSIVE");
 
-				device.setDeviceId(deviceId);
+				device.setDevice_id(deviceId);
 				device.setIp(received);
 				device.setPort(rPort);
 				device.setHostAddress(received.concat(":").concat(String.valueOf(rPort)));
@@ -177,18 +177,18 @@ public class RegisterRequestProcessor extends SIPRequestAbstractProcessor {
 			// 保存到redis
 			// 下发catelog查询目录
 			if (registerFlag == 1 && device != null) {
-				logger.info("注册成功! deviceId:" + device.getDeviceId());
-				boolean exists = storager.exists(device.getDeviceId());
+				logger.info("注册成功! deviceId:" + device.getDevice_id());
+				boolean exists = storager.exists(device.getDevice_id());
 				device.setRegisterTimeMillis(System.currentTimeMillis());
 				storager.updateDevice(device);
-				publisher.onlineEventPublish(device.getDeviceId(), VideoManagerConstants.EVENT_ONLINE_REGISTER);
+				publisher.onlineEventPublish(device.getDevice_id(), VideoManagerConstants.EVENT_ONLINE_REGISTER);
 				// 重新注册更新设备和通道，以免设备替换或更新后信息无法更新
 				if (!exists) {
 					handler.onRegister(device);
 				}
 			} else if (registerFlag == 2) {
-				logger.info("注销成功! deviceId:" + device.getDeviceId());
-				publisher.outlineEventPublish(device.getDeviceId(), VideoManagerConstants.EVENT_OUTLINE_UNREGISTER);
+				logger.info("注销成功! deviceId:" + device.getDevice_id());
+				publisher.outlineEventPublish(device.getDevice_id(), VideoManagerConstants.EVENT_OUTLINE_UNREGISTER);
 			}
 		} catch (SipException | InvalidArgumentException | NoSuchAlgorithmException | ParseException e) {
 			e.printStackTrace();

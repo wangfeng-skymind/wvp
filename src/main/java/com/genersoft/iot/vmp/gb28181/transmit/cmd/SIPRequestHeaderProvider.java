@@ -47,7 +47,7 @@ public class SIPRequestHeaderProvider {
 		log.info("SIP.createMessageRequest==content==" + content +">===viaTag=>>"+ viaTag +">==fromTag==>>" + fromTag +">===toTag=>>" + toTag);
 		Request request = null;
 		// sipuri
-		SipURI requestURI = sipFactory.createAddressFactory().createSipURI(device.getDeviceId(), device.getHostAddress());
+		SipURI requestURI = sipFactory.createAddressFactory().createSipURI(device.getDevice_id(), device.getHostAddress());
 		// via
 		ArrayList<ViaHeader> viaHeaders = new ArrayList<ViaHeader>();
 		ViaHeader viaHeader = sipFactory.createHeaderFactory().createViaHeader(sipConfig.getSipIp(), sipConfig.getSipPort(),
@@ -60,7 +60,7 @@ public class SIPRequestHeaderProvider {
 		Address fromAddress = sipFactory.createAddressFactory().createAddress(fromSipURI);
 		FromHeader fromHeader = sipFactory.createHeaderFactory().createFromHeader(fromAddress, fromTag);
 		// to
-		SipURI toSipURI = sipFactory.createAddressFactory().createSipURI(device.getDeviceId(), sipConfig.getSipDomain());
+		SipURI toSipURI = sipFactory.createAddressFactory().createSipURI(device.getDevice_id(), sipConfig.getSipDomain());
 		Address toAddress = sipFactory.createAddressFactory().createAddress(toSipURI);
 		ToHeader toHeader = sipFactory.createHeaderFactory().createToHeader(toAddress, toTag);
 		// callid
@@ -132,7 +132,7 @@ public class SIPRequestHeaderProvider {
 
 		Request request = null;
 		//请求行
-		SipURI requestLine = sipFactory.createAddressFactory().createSipURI(device.getDeviceId(), device.getHostAddress());
+		SipURI requestLine = sipFactory.createAddressFactory().createSipURI(device.getDevice_id(), device.getHostAddress());
 		// via
 		ArrayList<ViaHeader> viaHeaders = new ArrayList<ViaHeader>();
 		ViaHeader viaHeader = sipFactory.createHeaderFactory().createViaHeader(device.getIp(), device.getPort(), device.getTransport(), viaTag);
@@ -177,7 +177,7 @@ public class SIPRequestHeaderProvider {
 
 		Request request = null;
 		// sipuri
-		SipURI requestURI = sipFactory.createAddressFactory().createSipURI(device.getDeviceId(), device.getHostAddress());
+		SipURI requestURI = sipFactory.createAddressFactory().createSipURI(device.getDevice_id(), device.getHostAddress());
 		// via
 		ArrayList<ViaHeader> viaHeaders = new ArrayList<ViaHeader>();
 		ViaHeader viaHeader = sipFactory.createHeaderFactory().createViaHeader(sipConfig.getSipIp(), sipConfig.getSipPort(),
@@ -190,7 +190,7 @@ public class SIPRequestHeaderProvider {
 		Address fromAddress = sipFactory.createAddressFactory().createAddress(fromSipURI);
 		FromHeader fromHeader = sipFactory.createHeaderFactory().createFromHeader(fromAddress, fromTag);
 		// to
-		SipURI toSipURI = sipFactory.createAddressFactory().createSipURI(device.getDeviceId(), sipConfig.getSipDomain());
+		SipURI toSipURI = sipFactory.createAddressFactory().createSipURI(device.getDevice_id(), sipConfig.getSipDomain());
 		Address toAddress = sipFactory.createAddressFactory().createAddress(toSipURI);
 		ToHeader toHeader = sipFactory.createHeaderFactory().createToHeader(toAddress, toTag);
 		// callid
